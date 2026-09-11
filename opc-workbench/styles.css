@@ -1,6 +1,6 @@
 /* ===== OPC Workbench Design Contract =====
-   4 themes: indigo-night (default) | emerald-dark | amber-warm | ocean-deep
-   Switch via <body data-theme="emerald"> etc. Default is indigo-night.
+   4 themes: indigo-night (default) | neon-purple | cyber-teal | ocean-deep
+   Switch via <body data-theme="neon"> etc. Default is indigo-night.
    ============================================ */
 
 /* --- Theme: Indigo Night (DEFAULT) --- */
@@ -34,64 +34,64 @@
   --glass-border-hover: rgba(99, 102, 241, 0.3);
 }
 
-/* --- Theme: Emerald Dark --- */
-[data-theme="emerald"] {
-  --color-primary: #10B981;
-  --color-primary-hover: #059669;
-  --color-primary-light: rgba(16, 185, 129, 0.15);
-  --color-accent: #34D399;
-  --color-accent-light: rgba(52, 211, 153, 0.15);
-  --color-success: #22C55E;
-  --color-success-light: rgba(34, 197, 94, 0.15);
-  --color-warning: #FBBF24;
-  --color-warning-light: rgba(251, 191, 36, 0.15);
-  --color-danger: #F87171;
-  --color-danger-light: rgba(248, 113, 113, 0.15);
-  --color-bg: #0A1A14;
-  --color-bg-alt: #0D2419;
-  --color-surface: #15302A;
-  --color-surface-hover: #1C3D35;
-  --color-surface-elevated: #234D42;
-  --color-border: #234D42;
-  --color-border-light: #15302A;
-  --color-text: #D1FAE5;
-  --color-text-sub: #6EE7B7;
-  --color-text-muted: #4B9E7A;
-  --shadow-glow: 0 0 24px rgba(16, 185, 129, 0.25);
-  --bg-glow-1: rgba(16, 185, 129, 0.08);
-  --bg-glow-2: rgba(52, 211, 153, 0.06);
-  --glass-border: rgba(16, 185, 129, 0.15);
-  --glass-border-hover: rgba(16, 185, 129, 0.3);
-}
-
-/* --- Theme: Amber Warm --- */
-[data-theme="amber"] {
-  --color-primary: #F59E0B;
-  --color-primary-hover: #D97706;
-  --color-primary-light: rgba(245, 158, 11, 0.15);
-  --color-accent: #FB923C;
-  --color-accent-light: rgba(251, 146, 60, 0.15);
-  --color-success: #84CC16;
-  --color-success-light: rgba(132, 204, 22, 0.15);
-  --color-warning: #FACC15;
-  --color-warning-light: rgba(250, 204, 21, 0.15);
+/* --- Theme: Neon Purple --- */
+[data-theme="neon"] {
+  --color-primary: #A855F7;
+  --color-primary-hover: #9333EA;
+  --color-primary-light: rgba(168, 85, 247, 0.15);
+  --color-accent: #EC4899;
+  --color-accent-light: rgba(236, 72, 153, 0.15);
+  --color-success: #10B981;
+  --color-success-light: rgba(16, 185, 129, 0.15);
+  --color-warning: #F59E0B;
+  --color-warning-light: rgba(245, 158, 11, 0.15);
   --color-danger: #EF4444;
   --color-danger-light: rgba(239, 68, 68, 0.15);
-  --color-bg: #1A1208;
-  --color-bg-alt: #241A0D;
-  --color-surface: #2E2515;
-  --color-surface-hover: #3A2F1A;
-  --color-surface-elevated: #463A20;
-  --color-border: #463A20;
-  --color-border-light: #2E2515;
-  --color-text: #FEF3C7;
-  --color-text-sub: #D6B88A;
-  --color-text-muted: #A0865A;
-  --shadow-glow: 0 0 24px rgba(245, 158, 11, 0.25);
-  --bg-glow-1: rgba(245, 158, 11, 0.08);
-  --bg-glow-2: rgba(251, 146, 60, 0.06);
-  --glass-border: rgba(245, 158, 11, 0.15);
-  --glass-border-hover: rgba(245, 158, 11, 0.3);
+  --color-bg: #0C0A1A;
+  --color-bg-alt: #140F24;
+  --color-surface: #1E1635;
+  --color-surface-hover: #2A1F48;
+  --color-surface-elevated: #362861;
+  --color-border: #362861;
+  --color-border-light: #1E1635;
+  --color-text: #F3E8FF;
+  --color-text-sub: #C4B5FD;
+  --color-text-muted: #8B6EC0;
+  --shadow-glow: 0 0 24px rgba(168, 85, 247, 0.3);
+  --bg-glow-1: rgba(168, 85, 247, 0.1);
+  --bg-glow-2: rgba(236, 72, 153, 0.06);
+  --glass-border: rgba(168, 85, 247, 0.18);
+  --glass-border-hover: rgba(168, 85, 247, 0.35);
+}
+
+/* --- Theme: Cyber Teal --- */
+[data-theme="cyber"] {
+  --color-primary: #14B8A6;
+  --color-primary-hover: #0D9488;
+  --color-primary-light: rgba(20, 184, 166, 0.15);
+  --color-accent: #8B5CF6;
+  --color-accent-light: rgba(139, 92, 246, 0.15);
+  --color-success: #22C55E;
+  --color-success-light: rgba(34, 197, 94, 0.15);
+  --color-warning: #F59E0B;
+  --color-warning-light: rgba(245, 158, 11, 0.15);
+  --color-danger: #EF4444;
+  --color-danger-light: rgba(239, 68, 68, 0.15);
+  --color-bg: #051114;
+  --color-bg-alt: #081A1E;
+  --color-surface: #0F2528;
+  --color-surface-hover: #143034;
+  --color-surface-elevated: #1A3D42;
+  --color-border: #1A3D42;
+  --color-border-light: #0F2528;
+  --color-text: #CCFBF1;
+  --color-text-sub: #5EEAD4;
+  --color-text-muted: #2E9A8E;
+  --shadow-glow: 0 0 24px rgba(20, 184, 166, 0.3);
+  --bg-glow-1: rgba(20, 184, 166, 0.08);
+  --bg-glow-2: rgba(139, 92, 246, 0.06);
+  --glass-border: rgba(20, 184, 166, 0.18);
+  --glass-border-hover: rgba(20, 184, 166, 0.35);
 }
 
 /* --- Theme: Ocean Deep --- */
@@ -165,8 +165,8 @@
 .theme-dot:hover { transform: scale(1.15); }
 .theme-dot.active { border-color: var(--color-text); }
 .theme-dot[data-set="indigo"] { background: #6366F1; }
-.theme-dot[data-set="emerald"] { background: #10B981; }
-.theme-dot[data-set="amber"] { background: #F59E0B; }
+.theme-dot[data-set="neon"] { background: #A855F7; }
+.theme-dot[data-set="cyber"] { background: #14B8A6; }
 .theme-dot[data-set="ocean"] { background: #0EA5E9; }
 
 /* --- Reset --- */
