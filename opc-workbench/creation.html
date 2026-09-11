@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPC 一人公司工作台 - AI 创作引擎</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body[data-page="creation"] .nav-item[data-nav="creation"] { background: var(--color-primary-light); color: var(--color-primary); }
+body[data-page="creation"] .nav-item[data-nav="creation"]::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--color-primary); border-radius: 0 3px 3px 0; }
+/* Prompt input */
+.prompt-input {
+  width: 100%;
+  min-height: 120px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  color: var(--color-text);
+  font-size: var(--fs-14px);
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--transition);
+}
+.prompt-input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-light); }
+.prompt-input::placeholder { color: var(--color-text-muted); }
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  height: 28px; padding: 0 12px;
+  border-radius: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-sub);
+  font-size: 12px; font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.chip:hover { border-color: var(--color-primary); color: var(--color-primary); background: var(--color-primary-light); }
+.tool-card {
+  position: relative;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 8px;
+  transition: all var(--transition);
+  cursor: pointer;
+}
+.tool-card.connected { border-color: rgba(99, 102, 241, 0.4); }
+.tool-card.connected:hover { border-color: var(--color-primary); box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); transform: translateY(-2px); }
+.tool-card:not(.connected) { opacity: 0.7; }
+.tool-card:not(.connected):hover { opacity: 1; border-color: var(--color-border); }
+.tool-add {
+  border: 1px dashed var(--color-border);
+  background: transparent;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 160px;
+  gap: 8px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+  border-radius: var(--radius-md);
+}
+.tool-add:hover { border-color: var(--color-primary); color: var(--color-primary); background: var(--color-primary-light); }
+.asset-row { display: flex; align-items: center; gap: 12px; padding: 10px 8px; border-radius: 6px; transition: background var(--transition); cursor: pointer; }
+.asset-row:hover { background: var(--color-surface-hover); }
+.asset-icon { width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.asset-icon svg { width: 16px; height: 16px; }
+</style>
+</head>
+<body data-page="creation">
+<div class="app-shell">
+  <!-- ===== App Nav (frozen — paste verbatim) ===== -->
+  <aside class="app-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="nav-logo-text">OPC Workbench</span>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">主菜单</div>
+      <a href="index.html" class="nav-item" data-nav="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+        <span class="nav-item-text">工作台</span>
+      </a>
+      <a href="creation.html" class="nav-item" data-nav="creation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+        <span class="nav-item-text">AI 创作</span>
+      </a>
+      <a href="workflow.html" class="nav-item" data-nav="workflow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>
+        <span class="nav-item-text">工作流</span>
+      </a>
+      <a href="distribute.html" class="nav-item" data-nav="distribute">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        <span class="nav-item-text">分发</span>
+      </a>
+      <a href="inbox.html" class="nav-item" data-nav="inbox">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+        <span class="nav-item-text">消息</span>
+        <span class="nav-item-badge">3</span>
+      </a>
+      <a href="analytics.html" class="nav-item" data-nav="analytics">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+        <span class="nav-item-text">数据</span>
+      </a>
+    </div>
+    <div class="nav-footer">
+      <div class="nav-user">
+        <div class="nav-user-avatar">CY</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name">陈逸飞</div>
+          <div class="nav-user-plan">Pro+ 会员</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- ===== Main Content ===== -->
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="topbar-search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="搜索任务、内容、平台…">
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn tooltip" data-tip="新建任务">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="通知">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.274 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645l.435 1.305a5 5 0 0 0 3.03 3.03l1.305.435a1 1 0 0 1 0 1.89l-1.305.435a5 5 0 0 0-3.03 3.03l-.435 1.305a1 1 0 0 1-1.89 0l-.435-1.305a5 5 0 0 0-3.03-3.03l-1.305-.435a1 1 0 0 1 0-1.89l1.305-.435a5 5 0 0 0 3.03-3.03z"/><path d="M9 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645"/></svg>
+          <span class="topbar-btn-dot"></span>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="设置">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </header>
+    <!-- PAGE-SPECIFIC CONTENT GOES IN .page-content BELOW -->
+    <div class="page-content">
+      <!-- ===== Page Header ===== -->
+      <div class="page-header">
+        <div>
+          <div class="page-title">AI 创作引擎</div>
+          <div class="page-subtitle">一站式 AI 工具调度 · 一个人就是一支团队</div>
+        </div>
+      </div>
+
+      <!-- ===== Row 1: Unified Prompt Input ===== -->
+      <div class="glass-card animate-in mb-24">
+        <div class="flex items-center gap-12 mb-16">
+          <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:var(--color-primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+          </div>
+          <div>
+            <div class="text-lg font-semibold">统一创作入口</div>
+            <div class="text-sm text-sub">输入需求，WorkBuddy 会自动编排最佳工具组合</div>
+          </div>
+        </div>
+        <textarea class="prompt-input" id="promptInput" placeholder="描述你的创作需求，AI 会自动选择最佳工具组合…"></textarea>
+        <div class="text-sm text-muted mt-8 mb-16" style="margin-top:8px;">示例：帮我做一期关于AI教育的短视频，包含脚本、分镜图和配音</div>
+        <div class="flex items-center gap-8 mb-16" style="flex-wrap:wrap;">
+          <span class="text-sm text-muted">快捷模板：</span>
+          <span class="chip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2"/><rect width="8" height="8" x="13" y="3" rx="2"/><rect width="8" height="8" x="3" y="13" rx="2"/></svg>
+            短视频制作
+          </span>
+          <span class="chip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20v14H2z"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+            图文种草
+          </span>
+          <span class="chip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M9 9h6v6H9z"/></svg>
+            AI 漫剧
+          </span>
+          <span class="chip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            知识科普
+          </span>
+          <span class="chip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            有声书
+          </span>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="text-sm text-muted flex items-center gap-8">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <span>已连接 <span class="text-success font-semibold">10</span> 个 AI 工具，可调用 50,000 额度</span>
+          </div>
+          <div class="flex items-center gap-8">
+            <button class="btn btn-secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3a2 2 0 0 0-2 2"/><path d="M19 3a2 2 0 0 1 2 2"/><path d="M5 21a2 2 0 0 1-2-2"/><path d="M19 21a2 2 0 0 0 2-2"/><path d="M9 3h1"/><path d="M9 21h1"/><path d="M14 3h1"/><path d="M14 21h1"/><path d="M3 9v1"/><path d="M21 9v1"/><path d="M3 14v1"/><path d="M21 14v1"/></svg>
+              工具链模式
+            </button>
+            <button class="btn btn-primary btn-lg" id="executeBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l14 9-14 9z"/></svg>
+              执行
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Row 2: AI Tool Panel + Asset Library ===== -->
+      <div class="grid mb-24" style="grid-template-columns: 2fr 1fr;">
+        <!-- Left: AI Tools -->
+        <div class="card animate-in">
+          <div class="card-header">
+            <div class="flex items-center gap-8">
+              <div class="card-title">AI 工具调度面板</div>
+              <span class="tag tag-success">
+                <span style="width:6px;height:6px;border-radius:50%;background:var(--color-success);display:inline-block;"></span>
+                10 已连接
+              </span>
+            </div>
+            <button class="btn btn-ghost btn-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>
+              筛选
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="grid grid-3" id="toolGrid"></div>
+          </div>
+        </div>
+
+        <!-- Right: Asset Library -->
+        <div class="card animate-in">
+          <div class="card-header">
+            <div class="card-title">素材资产库</div>
+            <button class="btn btn-ghost btn-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/></svg>
+              上传
+            </button>
+          </div>
+          <div class="tabs" id="assetTabs">
+            <div class="tab active" data-type="all">全部</div>
+            <div class="tab" data-type="image">图片</div>
+            <div class="tab" data-type="video">视频</div>
+            <div class="tab" data-type="text">文本</div>
+            <div class="tab" data-type="audio">音频</div>
+          </div>
+          <div class="card-body" style="padding:12px;">
+            <div id="assetList" class="flex flex-col"></div>
+            <div class="flex justify-between items-center mt-16" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--color-border-light);">
+              <span class="text-sm text-muted">共 8 个资产</span>
+              <a href="#" class="text-sm text-primary font-medium" style="display:inline-flex;align-items:center;gap:4px;">
+                查看全部
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Row 3: Recent Activity ===== -->
+      <div class="card animate-in">
+        <div class="card-header">
+          <div class="card-title">最近创作活动</div>
+          <div class="flex items-center gap-8">
+            <span class="tag tag-neutral">最近 24 小时</span>
+            <a href="analytics.html" class="btn btn-ghost btn-sm">查看日志</a>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>时间</th>
+                <th>工具</th>
+                <th>操作类型</th>
+                <th>输入摘要</th>
+                <th>状态</th>
+                <th>产出资产</th>
+              </tr>
+            </thead>
+            <tbody id="activityTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="mock.js"></script>
+<script src="api.js"></script>
+<script>
+// ===== Page-specific JS =====
+(function() {
+  // --- AI Tool Cards ---
+  const toolGrid = document.getElementById('toolGrid');
+  DB.aiTools.forEach(t => {
+    const card = document.createElement('div');
+    card.className = 'tool-card' + (t.connected ? ' connected' : '');
+    card.innerHTML = `
+      <div class="flex items-center justify-between">
+        <div style="width:36px;height:36px;border-radius:8px;background:${t.color};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">
+          ${t.icon}
+        </div>
+        <div class="flex items-center gap-4">
+          <span title="${t.connected ? '已连接' : '未连接'}" style="width:8px;height:8px;border-radius:50%;background:${t.connected ? 'var(--color-success)' : 'var(--color-text-muted)'};${t.connected ? 'box-shadow:0 0 6px var(--color-success);' : ''}display:inline-block;"></span>
+          <span class="text-sm text-muted" style="font-family:var(--font-mono);">${t.calls.toLocaleString()} 次</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between" style="margin-top:4px;">
+        <div class="font-semibold text-md">${t.name}</div>
+        <span class="tag tag-neutral">${t.category}</span>
+      </div>
+      <div class="text-sm text-sub" style="font-size:12px;line-height:1.5;">${t.desc}</div>
+    `;
+    toolGrid.appendChild(card);
+  });
+  // Add tool card at end
+  const addCard = document.createElement('div');
+  addCard.className = 'tool-add';
+  addCard.innerHTML = `
+    <div style="width:36px;height:36px;border-radius:50%;background:var(--color-surface-elevated);display:flex;align-items:center;justify-content:center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    </div>
+    <div class="text-sm font-medium">添加工具</div>
+    <div class="text-sm text-muted" style="font-size:11px;">连接新的 AI 服务</div>
+  `;
+  toolGrid.appendChild(addCard);
+
+  // --- Asset Library ---
+  const assetIcons = {
+    image: { bg: 'var(--color-primary-light)', color: 'var(--color-primary)', svg: '<rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>' },
+    video: { bg: 'var(--color-accent-light)', color: 'var(--color-accent)', svg: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M17 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/>' },
+    text: { bg: 'var(--color-success-light)', color: 'var(--color-success)', svg: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>' },
+    audio: { bg: 'var(--color-warning-light)', color: 'var(--color-warning)', svg: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>' },
+  };
+
+  function renderAssets(type) {
+    const list = document.getElementById('assetList');
+    list.innerHTML = '';
+    const filtered = type === 'all' ? DB.assets : DB.assets.filter(a => a.type === type);
+    filtered.slice(0, 6).forEach(a => {
+      const ic = assetIcons[a.type] || assetIcons.text;
+      const row = document.createElement('div');
+      row.className = 'asset-row';
+      row.innerHTML = `
+        <div class="asset-icon" style="background:${ic.bg};color:${ic.color};">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ic.svg}</svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div class="text-md font-medium" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.name}</div>
+          <div class="flex items-center gap-8 text-sm text-muted mt-8" style="margin-top:2px;gap:6px;font-size:11px;">
+            <span class="tag tag-primary" style="height:18px;font-size:10px;">${a.source}</span>
+            <span>${a.date}</span>
+            <span>·</span>
+            <span>${a.size}</span>
+          </div>
+        </div>
+      `;
+      list.appendChild(row);
+    });
+  }
+  renderAssets('all');
+
+  // --- Asset Tab Switching ---
+  document.querySelectorAll('#assetTabs .tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('#assetTabs .tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderAssets(tab.dataset.type);
+    });
+  });
+
+  // --- Recent Activity Table ---
+  const activities = [
+    { time: '10:42', tool: '豆包', toolColor: '#4E6EF2', toolIcon: 'DB', opType: '脚本生成', input: 'AI教育短视频第15期脚本，主题：大模型在K12的应用', status: 'success', asset: '脚本-第15期.txt' },
+    { time: '10:15', tool: '即梦AI', toolColor: '#FF6B6B', toolIcon: 'JM', opType: '图片生成', input: '生成3张分镜图：教室场景、教师特写、学生反应', status: 'success', asset: '分镜-3张.zip' },
+    { time: '09:58', tool: '可灵AI', toolColor: '#8B5CF6', toolIcon: 'KL', opType: '视频生成', input: '图生视频：分镜2转场动画，5秒时长', status: 'success', asset: '分镜2-动画.mp4' },
+    { time: '09:30', tool: 'Azure TTS', toolColor: '#0078D4', toolIcon: 'AZ', opType: '语音合成', input: '脚本第15期配音，男声，标准语速', status: 'success', asset: '配音-第15期.mp3' },
+    { time: '09:12', tool: 'MOKI', toolColor: '#EC4899', toolIcon: 'MK', opType: '漫剧生成', input: '批量生成AI漫剧第3集，6个分镜', status: 'processing', asset: '生成中…' },
+    { time: '08:45', tool: 'ChatGPT', toolColor: '#10A37F', toolIcon: 'GP', opType: '内容润色', input: '优化小红书种草文案：冬季护肤5件套', status: 'failed', asset: '—' },
+  ];
+  const statusMap = {
+    success: { cls: 'tag-success', text: '成功', icon: '<path d="M20 6 9 17l-5-5"/>' },
+    processing: { cls: 'tag-warning', text: '进行中', icon: '<path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>' },
+    failed: { cls: 'tag-danger', text: '失败', icon: '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>' },
+  };
+  const atBody = document.getElementById('activityTable');
+  activities.forEach(a => {
+    const st = statusMap[a.status];
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="text-sm text-muted" style="font-family:var(--font-mono);">${a.time}</td>
+      <td>
+        <div class="flex items-center gap-8">
+          <span class="platform-icon" style="background:${a.toolColor};">${a.toolIcon}</span>
+          <span class="font-medium">${a.tool}</span>
+        </div>
+      </td>
+      <td><span class="tag tag-info">${a.opType}</span></td>
+      <td class="text-sm text-sub" style="max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.input}</td>
+      <td>
+        <span class="tag ${st.cls}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;">${st.icon}</svg>
+          ${st.text}
+        </span>
+      </td>
+      <td class="text-sm ${a.status === 'failed' ? 'text-muted' : 'text-primary'}">${a.asset}</td>
+    `;
+    atBody.appendChild(tr);
+  });
+
+  // --- Chip & Execute demo interactions ---
+  const promptInput = document.getElementById('promptInput');
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const text = chip.textContent.trim();
+      const templates = {
+        '短视频制作': '帮我做一期关于AI教育的短视频，包含脚本、分镜图和配音，目标平台抖音',
+        '图文种草': '写一篇小红书种草笔记，主题：冬季护肤5件套，目标人群25-35岁女性',
+        'AI 漫剧': '生成AI漫剧第3集，6个分镜，故事主线：科幻悬疑，主角发现时间循环',
+        '知识科普': '制作B站知识科普视频，主题：大模型原理通俗解释，时长5分钟',
+        '有声书': '录制有声书第8章旁白，男声，沉稳叙事风格，语速适中',
+      };
+      promptInput.value = templates[text] || text;
+    });
+  });
+
+  document.getElementById('executeBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('executeBtn');
+    const original = btn.innerHTML;
+    const val = promptInput.value.trim();
+    if (!val) {
+      promptInput.focus();
+      promptInput.style.borderColor = 'var(--color-danger)';
+      setTimeout(() => promptInput.style.borderColor = '', 1500);
+      return;
+    }
+    btn.disabled = true;
+    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg> 调度中…';
+    const res = await executeAITool('WorkBuddy', val);
+    btn.disabled = false;
+    btn.innerHTML = original;
+    // visual feedback
+    btn.style.boxShadow = '0 0 16px var(--color-success)';
+    setTimeout(() => btn.style.boxShadow = '', 1200);
+  });
+})();
+</script>
+</body>
+</html>

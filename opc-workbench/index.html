@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPC 一人公司工作台 - 工作台</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body[data-page="dashboard"] .nav-item[data-nav="dashboard"] { background: var(--color-primary-light); color: var(--color-primary); }
+body[data-page="dashboard"] .nav-item[data-nav="dashboard"]::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--color-primary); border-radius: 0 3px 3px 0; }
+</style>
+</head>
+<body data-page="dashboard">
+<div class="app-shell">
+  <!-- ===== App Nav (frozen — paste verbatim) ===== -->
+  <aside class="app-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="nav-logo-text">OPC Workbench</span>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">主菜单</div>
+      <a href="index.html" class="nav-item" data-nav="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+        <span class="nav-item-text">工作台</span>
+      </a>
+      <a href="creation.html" class="nav-item" data-nav="creation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+        <span class="nav-item-text">AI 创作</span>
+      </a>
+      <a href="workflow.html" class="nav-item" data-nav="workflow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>
+        <span class="nav-item-text">工作流</span>
+      </a>
+      <a href="distribute.html" class="nav-item" data-nav="distribute">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        <span class="nav-item-text">分发</span>
+      </a>
+      <a href="inbox.html" class="nav-item" data-nav="inbox">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+        <span class="nav-item-text">消息</span>
+        <span class="nav-item-badge">3</span>
+      </a>
+      <a href="analytics.html" class="nav-item" data-nav="analytics">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+        <span class="nav-item-text">数据</span>
+      </a>
+    </div>
+    <div class="nav-footer">
+      <div class="nav-user">
+        <div class="nav-user-avatar">CY</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name">陈逸飞</div>
+          <div class="nav-user-plan">Pro+ 会员</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- ===== Main Content ===== -->
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="topbar-search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="搜索任务、内容、平台…">
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn tooltip" data-tip="新建任务">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="通知">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.274 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645l.435 1.305a5 5 0 0 0 3.03 3.03l1.305.435a1 1 0 0 1 0 1.89l-1.305.435a5 5 0 0 0-3.03 3.03l-.435 1.305a1 1 0 0 1-1.89 0l-.435-1.305a5 5 0 0 0-3.03-3.03l-1.305-.435a1 1 0 0 1 0-1.89l1.305-.435a5 5 0 0 0 3.03-3.03z"/><path d="M9 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645"/></svg>
+          <span class="topbar-btn-dot"></span>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="设置">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </header>
+    <!-- PAGE-SPECIFIC CONTENT GOES IN .page-content BELOW -->
+    <div class="page-content">
+      <!-- ===== Page Header ===== -->
+      <div class="page-header">
+        <div>
+          <div class="page-title">工作台</div>
+          <div class="page-subtitle">今日概览 · 一个人就是一家公司</div>
+        </div>
+        <button class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          新建任务
+        </button>
+      </div>
+
+      <!-- ===== Row 1: Stat Cards ===== -->
+      <div class="grid grid-4 mb-24">
+        <div class="stat-card animate-in">
+          <div class="stat-card-icon" style="background: var(--color-primary-light); color: var(--color-primary);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div class="stat-card-label">今日任务</div>
+          <div class="stat-card-value">3<span style="font-size:18px;color:var(--color-text-muted);">/6</span></div>
+          <div class="stat-card-trend text-sub">已完成 50%</div>
+        </div>
+
+        <div class="stat-card animate-in">
+          <div class="stat-card-icon" style="background: var(--color-success-light); color: var(--color-success);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="stat-card-label">本月收入</div>
+          <div class="stat-card-value">¥28,560</div>
+          <div class="stat-card-trend up">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6-6 6 6"/><path d="M12 3v18"/></svg>
+            +12.3% 较上月
+          </div>
+        </div>
+
+        <div class="stat-card animate-in">
+          <div class="stat-card-icon" style="background: var(--color-warning-light); color: var(--color-warning);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="4"/><path d="M16 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0"/><path d="M20 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0"/><path d="M3 16a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4"/></svg>
+          </div>
+          <div class="stat-card-label">待处理订单</div>
+          <div class="stat-card-value">2</div>
+          <div class="stat-card-trend" style="color: var(--color-warning);">1件紧急</div>
+        </div>
+
+        <div class="stat-card animate-in">
+          <div class="stat-card-icon" style="background: var(--color-accent-light); color: var(--color-accent);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg>
+          </div>
+          <div class="stat-card-label">活跃工作流</div>
+          <div class="stat-card-value">4</div>
+          <div class="stat-card-trend text-accent">今日运行 16次</div>
+        </div>
+      </div>
+
+      <!-- ===== Row 2: Revenue Chart + Today Tasks ===== -->
+      <div class="grid mb-24" style="grid-template-columns: 2fr 1fr;">
+        <div class="card animate-in">
+          <div class="card-header">
+            <div class="card-title">收入趋势</div>
+            <div class="flex items-center gap-8 text-sm text-sub">
+              <span class="flex items-center gap-4"><span style="width:8px;height:8px;background:var(--color-primary);border-radius:2px;display:inline-block;"></span>近7日</span>
+              <span class="flex items-center gap-4"><span style="width:8px;height:8px;background:var(--color-accent);border-radius:2px;display:inline-block;"></span>峰值</span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="flex items-end justify-between mb-16">
+              <div>
+                <div class="text-sm text-sub">本周收入合计</div>
+                <div class="text-2xl font-bold" style="font-family:var(--font-display);">¥7,820</div>
+              </div>
+              <div class="tag tag-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6-6 6 6"/><path d="M12 3v18"/></svg>
+                +18.6%
+              </div>
+            </div>
+            <div class="chart-bar" id="revenueChart"></div>
+            <div class="flex gap-8 mt-8" id="revenueLabels"></div>
+          </div>
+        </div>
+
+        <div class="card animate-in">
+          <div class="card-header">
+            <div class="card-title">今日任务</div>
+            <span class="tag tag-primary">6项</span>
+          </div>
+          <div class="card-body" style="padding:12px;">
+            <div id="taskList" class="flex flex-col"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Row 3: Platform Table + Workflow Status ===== -->
+      <div class="grid grid-2 mb-24">
+        <div class="card animate-in">
+          <div class="card-header">
+            <div class="card-title">各平台内容表现</div>
+            <a href="analytics.html" class="btn btn-ghost btn-sm">查看全部</a>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <table class="table" id="platformTable">
+              <thead>
+                <tr>
+                  <th>平台</th>
+                  <th>粉丝数</th>
+                  <th>本周播放</th>
+                  <th>互动率</th>
+                  <th>发布数</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card animate-in">
+          <div class="card-header">
+            <div class="card-title">自动化工作流状态</div>
+            <a href="workflow.html" class="btn btn-ghost btn-sm">管理</a>
+          </div>
+          <div class="card-body" style="padding:12px;">
+            <div id="workflowList" class="flex flex-col gap-12"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Row 4: AI Usage ===== -->
+      <div class="glass-card animate-in">
+        <div class="flex items-center justify-between mb-16">
+          <div class="flex items-center gap-12">
+            <div style="width:40px;height:40px;border-radius:var(--radius-sm);background:var(--color-primary-light);color:var(--color-primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 2v10l7 7"/><path d="M5 5h3v3"/><path d="M19 5v3h-3"/></svg>
+            </div>
+            <div>
+              <div class="text-lg font-semibold">AI 用量</div>
+              <div class="text-sm text-sub">本月已调用 AI 工具 8,175 次</div>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-4">
+            <span class="text-xl font-bold text-primary" style="font-family:var(--font-display);">15,600</span>
+            <span class="text-sm text-muted">/ 50,000 额度</span>
+          </div>
+        </div>
+        <div class="progress" style="height:8px;">
+          <div class="progress-bar" style="width: 31.2%;"></div>
+        </div>
+        <div class="flex items-center justify-between mt-8">
+          <span class="text-sm text-muted">已使用 31.2% · 剩余 34,400 额度</span>
+          <span class="tag tag-info">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="m4.93 4.93 2.83 2.83"/><path d="m16.24 16.24 2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 19.07 2.83-2.83"/><path d="m16.24 7.76 2.83-2.83"/></svg>
+            自动续费中
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="mock.js"></script>
+<script src="api.js"></script>
+<script>
+// ===== Page-specific JS =====
+(function() {
+  const priorityColor = { high: 'var(--color-danger)', medium: 'var(--color-warning)', low: 'var(--color-success)' };
+  const priorityLabel = { high: '高', medium: '中', low: '低' };
+  const statusTag = { 'in-progress': 'tag-warning', 'pending': 'tag-neutral', 'completed': 'tag-success', 'review': 'tag-info' };
+  const statusLabel = { 'in-progress': '进行中', 'pending': '待处理', 'completed': '已完成', 'review': '审核中' };
+
+  // --- Revenue Bar Chart ---
+  const maxVal = Math.max(...DB.revenueTrend.map(d => d.value));
+  const chart = document.getElementById('revenueChart');
+  const labels = document.getElementById('revenueLabels');
+  DB.revenueTrend.forEach((d, i) => {
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar-item' + (d.value === maxVal ? ' accent' : '');
+    bar.style.height = ((d.value / maxVal) * 100) + '%';
+    bar.title = `${d.date} ¥${d.value}`;
+    bar.setAttribute('data-tip', `${d.date} ¥${d.value}`);
+    bar.style.position = 'relative';
+    bar.classList.add('tooltip');
+    chart.appendChild(bar);
+
+    const lbl = document.createElement('div');
+    lbl.style.flex = '1';
+    lbl.style.textAlign = 'center';
+    lbl.style.fontSize = '11px';
+    lbl.style.color = d.value === maxVal ? 'var(--color-accent)' : 'var(--color-text-muted)';
+    lbl.style.fontWeight = d.value === maxVal ? '600' : '400';
+    lbl.textContent = d.date;
+    labels.appendChild(lbl);
+  });
+
+  // --- Today Task List ---
+  const taskList = document.getElementById('taskList');
+  DB.tasks.forEach(t => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:6px;transition:background 0.2s;';
+    row.onmouseenter = () => row.style.background = 'var(--color-surface-hover)';
+    row.onmouseleave = () => row.style.background = 'transparent';
+    row.innerHTML = `
+      <span title="${priorityLabel[t.priority]}优先级" style="width:8px;height:8px;border-radius:50%;background:${priorityColor[t.priority]};flex-shrink:0;"></span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.title}</div>
+        <div class="flex items-center gap-8 text-sm text-muted mt-8" style="margin-top:3px;gap:6px;">
+          <span>${t.platform}</span>
+          <span>·</span>
+          <span>${t.deadline}</span>
+        </div>
+      </div>
+      <span class="tag ${statusTag[t.status]}">${statusLabel[t.status]}</span>
+    `;
+    taskList.appendChild(row);
+  });
+
+  // --- Platform Performance Table ---
+  const tbody = document.querySelector('#platformTable tbody');
+  DB.platformPerformance.slice(0, 5).forEach(p => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>
+        <div class="flex items-center gap-8">
+          <span class="platform-icon" style="background:${p.color};">${p.icon}</span>
+          <span class="font-medium">${p.name}</span>
+        </div>
+      </td>
+      <td>${p.followers.toLocaleString()}</td>
+      <td>${p.views.toLocaleString()}</td>
+      <td><span class="text-success font-semibold">${p.engagement}%</span></td>
+      <td>${p.published}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // --- Workflow Status List ---
+  const wfList = document.getElementById('workflowList');
+  DB.workflows.forEach(w => {
+    const running = w.status === 'running';
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--color-border-light);border-radius:8px;transition:border-color 0.2s;';
+    row.onmouseenter = () => row.style.borderColor = 'var(--color-primary)';
+    row.onmouseleave = () => row.style.borderColor = 'var(--color-border-light)';
+    row.innerHTML = `
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-8">
+          <span style="width:8px;height:8px;border-radius:50%;background:${running ? 'var(--color-success)' : 'var(--color-text-muted)'};${running ? 'box-shadow:0 0 8px var(--color-success);' : ''}flex-shrink:0;"></span>
+          <span class="font-medium text-md">${w.name}</span>
+        </div>
+        <div class="flex items-center gap-8">
+          <span class="tag tag-neutral">${w.trigger}</span>
+          <span class="tag ${running ? 'tag-success' : 'tag-neutral'}">${running ? '运行中' : '已暂停'}</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between text-sm text-muted" style="gap:12px;">
+        <span>上次运行：${w.lastRun} · 今日 ${w.runsToday} 次</span>
+        <span style="font-family:var(--font-mono);color:var(--color-text-sub);">${w.successRate}%</span>
+      </div>
+      <div class="progress" style="height:4px;">
+        <div class="progress-bar" style="width:${w.successRate}%;${!running ? 'background:var(--color-surface-elevated);' : ''}"></div>
+      </div>
+    `;
+    wfList.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>

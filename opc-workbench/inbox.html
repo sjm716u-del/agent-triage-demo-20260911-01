@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPC 一人公司工作台 - 统一消息中枢</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body[data-page="inbox"] .nav-item[data-nav="inbox"] { background: var(--color-primary-light); color: var(--color-primary); }
+body[data-page="inbox"] .nav-item[data-nav="inbox"]::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--color-primary); border-radius: 0 3px 3px 0; }
+</style>
+</head>
+<body data-page="inbox">
+<div class="app-shell">
+  <!-- ===== App Nav (frozen — paste verbatim) ===== -->
+  <aside class="app-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="nav-logo-text">OPC Workbench</span>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">主菜单</div>
+      <a href="index.html" class="nav-item" data-nav="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+        <span class="nav-item-text">工作台</span>
+      </a>
+      <a href="creation.html" class="nav-item" data-nav="creation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+        <span class="nav-item-text">AI 创作</span>
+      </a>
+      <a href="workflow.html" class="nav-item" data-nav="workflow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>
+        <span class="nav-item-text">工作流</span>
+      </a>
+      <a href="distribute.html" class="nav-item" data-nav="distribute">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        <span class="nav-item-text">分发</span>
+      </a>
+      <a href="inbox.html" class="nav-item" data-nav="inbox">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+        <span class="nav-item-text">消息</span>
+        <span class="nav-item-badge">3</span>
+      </a>
+      <a href="analytics.html" class="nav-item" data-nav="analytics">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+        <span class="nav-item-text">数据</span>
+      </a>
+    </div>
+    <div class="nav-footer">
+      <div class="nav-user">
+        <div class="nav-user-avatar">CY</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name">陈逸飞</div>
+          <div class="nav-user-plan">Pro+ 会员</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- ===== Main Content ===== -->
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="topbar-search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="搜索任务、内容、平台…">
+      </div>
+      <div class="topbar-actions">
+        <button class="topbar-btn tooltip" data-tip="新建任务">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="通知">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.274 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645l.435 1.305a5 5 0 0 0 3.03 3.03l1.305.435a1 1 0 0 1 0 1.89l-1.305.435a5 5 0 0 0-3.03 3.03l-.435 1.305a1 1 0 0 1-1.89 0l-.435-1.305a5 5 0 0 0-3.03-3.03l-1.305-.435a1 1 0 0 1 0-1.89l1.305-.435a5 5 0 0 0 3.03-3.03z"/><path d="M9 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645"/></svg>
+          <span class="topbar-btn-dot"></span>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="设置">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </header>
+    <!-- PAGE-SPECIFIC CONTENT GOES IN .page-content BELOW -->
+    <div class="page-content" style="display: flex; flex-direction: column; overflow: hidden;">
+      <!-- ===== Page Header ===== -->
+      <div class="page-header" style="margin-bottom: 16px;">
+        <div>
+          <div class="page-title">统一消息中枢</div>
+          <div class="page-subtitle">多平台消息聚合 · AI 辅助回复</div>
+        </div>
+        <div class="flex gap-8">
+          <button class="btn btn-ghost btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>
+            <span>全部标为已读</span>
+          </button>
+          <button class="btn btn-ghost btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>消息设置</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== Inbox 3-column Layout ===== -->
+      <div class="animate-in" style="flex: 1; min-height: 0; display: flex; gap: 16px;">
+
+        <!-- Left: 平台筛选 -->
+        <aside class="card" style="width: 200px; flex-shrink: 0; display: flex; flex-direction: column; overflow-y: auto;">
+          <div class="card-header" style="padding: 14px 16px;">
+            <div class="card-title" style="font-size: 14px;">平台筛选</div>
+          </div>
+          <div style="padding: 8px; flex: 1; overflow-y: auto;">
+            <div data-filter="all" class="filter-item active" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: var(--color-primary-light); color: var(--color-primary); font-size: 13px; font-weight: 500; margin-bottom: 2px;">
+              <span>全部消息</span>
+              <span style="background: var(--color-surface-elevated); color: var(--color-text); padding: 0 6px; border-radius: 8px; font-size: 10px; font-weight: 600;">8</span>
+            </div>
+            <div style="padding: 10px 10px 6px; font-size: 11px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px;">平台</div>
+            <div data-filter="飞书" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8"><span style="width: 8px; height: 8px; border-radius: 50%; background: #3370FF;"></span>飞书</span>
+              <span style="color: var(--color-text-muted); font-size: 11px;">2</span>
+            </div>
+            <div data-filter="钉钉" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8"><span style="width: 8px; height: 8px; border-radius: 50%; background: #0089FF;"></span>钉钉</span>
+              <span style="color: var(--color-text-muted); font-size: 11px;">1</span>
+            </div>
+            <div data-filter="企业微信" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8"><span style="width: 8px; height: 8px; border-radius: 50%; background: #07C160;"></span>企业微信</span>
+              <span style="color: var(--color-text-muted); font-size: 11px;">2</span>
+            </div>
+            <div data-filter="微信" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8"><span style="width: 8px; height: 8px; border-radius: 50%; background: #07C160;"></span>微信</span>
+              <span style="color: var(--color-text-muted); font-size: 11px;">1</span>
+            </div>
+            <div data-filter="GitHub" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8"><span style="width: 8px; height: 8px; border-radius: 50%; background: #24292E; border: 1px solid var(--color-text-sub);"></span>GitHub</span>
+              <span style="color: var(--color-text-muted); font-size: 11px;">1</span>
+            </div>
+            <div data-filter="邮件" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8"><span style="width: 8px; height: 8px; border-radius: 50%; background: #EA4335;"></span>邮件</span>
+              <span style="color: var(--color-text-muted); font-size: 11px;">1</span>
+            </div>
+
+            <div style="padding: 14px 10px 6px; font-size: 11px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px;">智能筛选</div>
+            <div data-smart="unread" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                未读
+              </span>
+              <span style="color: var(--color-text-muted); font-size: 11px;">3</span>
+            </div>
+            <div data-smart="important" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><path d="M11.525 2.29a2 2 0 0 1 1.95 0l8.5 4.5a2 2 0 0 1 0 3.52l-8.5 4.5a2 2 0 0 1-1.95 0l-8.5-4.5a2 2 0 0 1 0-3.52Z"/></svg>
+                重要
+              </span>
+              <span style="color: var(--color-text-muted); font-size: 11px;">3</span>
+            </div>
+            <div data-smart="mention" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>
+                @我的
+              </span>
+            </div>
+            <div data-smart="pending" class="filter-item" style="padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; color: var(--color-text-sub); font-size: 13px; margin-bottom: 2px; transition: background var(--transition);">
+              <span class="flex items-center gap-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                待回复
+              </span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Middle: 消息列表 -->
+        <section class="card" style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden;">
+          <div class="card-header" style="padding: 14px 20px;">
+            <div class="card-title" style="font-size: 14px;">消息列表</div>
+            <span style="font-size: 12px; color: var(--color-text-muted);">共 8 条 · 未读 4</span>
+          </div>
+          <div id="msg-list" style="flex: 1; overflow-y: auto;"></div>
+        </section>
+
+        <!-- Right: 消息详情 -->
+        <aside class="card" style="width: 320px; flex-shrink: 0; display: flex; flex-direction: column; overflow: hidden;">
+          <div class="card-header" style="padding: 14px 20px;">
+            <div class="card-title" style="font-size: 14px;">消息详情</div>
+            <button class="topbar-btn" style="width: 28px; height: 28px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+            </button>
+          </div>
+          <div id="msg-detail" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px;">
+            <!-- Filled by JS -->
+          </div>
+        </aside>
+
+      </div>
+
+      <!-- ===== Bottom AI Analysis Bar ===== -->
+      <div class="glass-card animate-in" style="margin-top: 16px; padding: 12px 20px; display: flex; align-items: center; gap: 20px;">
+        <div class="flex items-center gap-8" style="flex-shrink: 0;">
+          <div style="width: 28px; height: 28px; border-radius: 6px; background: var(--color-accent-light); color: var(--color-accent); display: flex; align-items: center; justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+          </div>
+          <span style="font-size: 13px; font-weight: 600;">AI 消息分析</span>
+        </div>
+        <div style="font-size: 12px; color: var(--color-text-sub); flex-shrink: 0;">
+          今日共收到 <span style="color: var(--color-text); font-weight: 600;">23</span> 条消息 · AI 已自动回复 <span style="color: var(--color-success); font-weight: 600;">8</span> 条 · 待处理 <span style="color: var(--color-warning); font-weight: 600;">3</span> 条
+        </div>
+        <div style="flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0;">
+          <div class="progress" style="flex: 1;">
+            <div class="progress-bar" style="width: 34.8%;"></div>
+          </div>
+          <span style="font-size: 11px; color: var(--color-text-muted); flex-shrink: 0;">自动回复率 34.8%</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script src="mock.js"></script>
+<script src="api.js"></script>
+<script>
+// ===== Message List Rendering =====
+const AI_REPLIES = {
+  1: ['收到，我看下后给你反馈', '好的，第3章流程图我会重点确认，预计1小时内回复', '感谢修改，稍后确认后回复'],
+  2: ['好的，已收到报销审批通知', '感谢提醒，我会留意到账进度'],
+  3: ['收到，我会在第5页补充竞品对比数据', '好的，预计今天下午17:00前更新一版给您'],
+  4: ['好的，我把链接再发一下到群里', '稍等，马上把上次分享的AI工具链接同步给你'],
+  5: ['已收到 PR 合并通知，感谢', 'OK，稍后会同步本地分支'],
+  6: ['收到提醒，14:00 准时参会', '好的，已加入日程'],
+  7: ['已收到商单邀请，稍后回复对接详情', '感谢推荐，今晚前回复合作意向'],
+  8: ['收到，我看下封面初稿后回复', '好的，稍后给到具体调整意见'],
+};
+
+const listEl = document.getElementById('msg-list');
+const detailEl = document.getElementById('msg-detail');
+let activeId = DB.messages[0].id;
+
+function platformTagColor(p) {
+  if (p === '飞书' || p === '钉钉') return 'tag-info';
+  if (p === '企业微信' || p === '微信') return 'tag-success';
+  if (p === 'GitHub') return 'tag-neutral';
+  if (p === '邮件') return 'tag-danger';
+  return 'tag-primary';
+}
+
+function renderList(filter) {
+  const items = (DB.messages || []).filter(m => {
+    if (!filter || filter === 'all') return true;
+    if (filter === 'unread') return !m.read;
+    if (filter === 'important') return m.priority === 'high';
+    if (filter === 'mention') return /@陈逸飞|@你/.test(m.content);
+    if (filter === 'pending') return !m.read && m.priority === 'high';
+    return m.platform === filter;
+  });
+  listEl.innerHTML = items.length ? items.map(m => {
+    const highBorder = m.priority === 'high' ? `border-left: 3px solid var(--color-danger);` : `border-left: 3px solid transparent;`;
+    const unreadBg = !m.read ? `background: rgba(99, 102, 241, 0.06);` : '';
+    const dot = !m.read ? `<span style="width: 8px; height: 8px; border-radius: 50%; background: var(--color-primary); flex-shrink: 0;"></span>` : `<span style="width: 8px; height: 8px;"></span>`;
+    return `
+      <div class="msg-row" data-id="${m.id}" style="padding: 12px 16px; ${highBorder} ${unreadBg} display: flex; align-items: flex-start; gap: 12px; cursor: pointer; border-bottom: 1px solid var(--color-border-light); transition: background var(--transition); ${m.id === activeId ? 'background: rgba(99, 102, 241, 0.12);' : ''}">
+        <div class="platform-icon" style="background: ${m.platformColor}; width: 32px; height: 32px; font-size: 11px;">${m.platformIcon}</div>
+        <div class="avatar" style="background: linear-gradient(135deg, ${m.platformColor}, #06B6D4);">${m.senderAvatar}</div>
+        <div style="flex: 1; min-width: 0;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+            <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+              <span style="font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; ${!m.read ? 'color: var(--color-text);' : 'color: var(--color-text-sub);'}">${m.sender}</span>
+              <span class="tag ${platformTagColor(m.platform)}" style="flex-shrink: 0;">${m.platform}</span>
+            </div>
+            <span style="font-size: 11px; color: var(--color-text-muted); flex-shrink: 0;">${m.time}</span>
+          </div>
+          <div style="font-size: 12px; color: var(--color-text-sub); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${m.content}</div>
+        </div>
+        ${dot}
+      </div>
+    `;
+  }).join('') : `<div class="empty-state"><div class="empty-state-text">暂无符合条件的消息</div></div>`;
+
+  // hover
+  listEl.querySelectorAll('.msg-row').forEach(r => {
+    r.addEventListener('mouseenter', () => { if (r.dataset.id != activeId) r.style.background = 'var(--color-surface-hover)'; });
+    r.addEventListener('mouseleave', () => { if (r.dataset.id != activeId) r.style.background = ''; });
+    r.addEventListener('click', () => {
+      activeId = Number(r.dataset.id);
+      renderList(currentFilter);
+      renderDetail();
+    });
+  });
+}
+
+function renderDetail() {
+  const m = DB.messages.find(x => x.id === activeId) || DB.messages[0];
+  const replies = AI_REPLIES[m.id] || ['收到，稍后回复您', '好的，我会尽快处理'];
+  detailEl.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <div class="platform-icon" style="background: ${m.platformColor}; width: 36px; height: 36px; font-size: 13px;">${m.platformIcon}</div>
+      <div>
+        <div style="font-size: 14px; font-weight: 600;">${m.platform}</div>
+        <div style="font-size: 11px; color: var(--color-text-muted);">${m.time} · ${m.priority === 'high' ? '高优先级' : m.priority === 'low' ? '低优先级' : '普通'}</div>
+      </div>
+      <span class="tag ${platformTagColor(m.platform)}" style="margin-left: auto;">来源</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--color-surface-hover); border-radius: 8px;">
+      <div class="avatar avatar-lg" style="background: linear-gradient(135deg, ${m.platformColor}, #06B6D4);">${m.senderAvatar}</div>
+      <div style="min-width: 0;">
+        <div style="font-size: 14px; font-weight: 600;">${m.sender}</div>
+        <div style="font-size: 11px; color: var(--color-text-muted);">通过 ${m.platform} · ${m.type === 'group' ? '群聊' : m.type === 'notification' ? '系统通知' : m.type === 'email' ? '邮件' : m.type === 'file' ? '文件消息' : '文本消息'}</div>
+      </div>
+    </div>
+    <div style="font-size: 13px; line-height: 1.7; color: var(--color-text); padding: 12px; background: var(--color-bg-alt); border-radius: 8px; border: 1px solid var(--color-border-light);">
+      ${m.content}
+    </div>
+    <div class="glass-card" style="padding: 14px;">
+      <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px; color: var(--color-accent);"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+        <span style="font-size: 13px; font-weight: 600; color: var(--color-accent);">AI 建议回复</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        ${replies.map(r => `<button class="ai-reply-chip" data-text="${r.replace(/"/g, '&quot;')}" style="text-align: left; padding: 8px 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 6px; font-size: 12px; color: var(--color-text); transition: all var(--transition); line-height: 1.5;">${r}</button>`).join('')}
+      </div>
+    </div>
+    <div style="flex: 1;"></div>
+    <div style="display: flex; gap: 6px; padding-top: 4px;">
+      <button class="btn btn-ghost btn-sm" style="flex: 1; justify-content: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><path d="M14.5 15.5 9 10"/><path d="m13 6 7.5 7.5L13 21"/><path d="M4 6h7"/></svg>
+        转发
+      </button>
+      <button class="btn btn-ghost btn-sm" style="flex: 1; justify-content: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.44 12 17.77 5.82 21.44 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        标记重要
+      </button>
+      <button class="btn btn-ghost btn-sm" style="flex: 1; justify-content: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;"><rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="m9 13 3 3 3-3"/></svg>
+        归档
+      </button>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: flex-end;">
+      <textarea id="reply-input" placeholder="输入回复内容，或点击上方 AI 建议…" style="flex: 1; min-height: 64px; max-height: 120px; padding: 10px 12px; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; color: var(--color-text); font-size: 13px; resize: none; outline: none; font-family: inherit;" onfocus="this.style.borderColor='var(--color-primary)'" onblur="this.style.borderColor='var(--color-border)'"></textarea>
+      <button id="reply-send" class="btn btn-primary" style="height: 64px; padding: 0 16px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 16px; height: 16px;"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.062 1.062z"/><path d="m21.854 2.146-8.828 8.828"/></svg>
+        发送
+      </button>
+    </div>
+  `;
+  detailEl.querySelectorAll('.ai-reply-chip').forEach(c => {
+    c.addEventListener('mouseenter', () => { c.style.borderColor = 'var(--color-primary)'; c.style.background = 'var(--color-primary-light)'; });
+    c.addEventListener('mouseleave', () => { c.style.borderColor = 'var(--color-border)'; c.style.background = 'var(--color-surface)'; });
+    c.addEventListener('click', () => {
+      const input = document.getElementById('reply-input');
+      if (input) input.value = c.dataset.text;
+      input && input.focus();
+    });
+  });
+  const sendBtn = document.getElementById('reply-send');
+  if (sendBtn) sendBtn.addEventListener('click', () => {
+    const input = document.getElementById('reply-input');
+    if (input && input.value.trim()) { input.value = ''; alert('回复已发送'); }
+  });
+}
+
+// Filter interactions
+let currentFilter = 'all';
+document.querySelectorAll('[data-filter]').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter],[data-smart]').forEach(x => {
+      x.classList.remove('active');
+      x.style.background = ''; x.style.color = '';
+    });
+    el.classList.add('active');
+    el.style.background = 'var(--color-primary-light)'; el.style.color = 'var(--color-primary)';
+    currentFilter = el.dataset.filter || el.dataset.smart;
+    renderList(currentFilter);
+  });
+});
+document.querySelectorAll('[data-smart]').forEach(el => {
+  el.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter],[data-smart]').forEach(x => {
+      x.classList.remove('active'); x.style.background = ''; x.style.color = '';
+    });
+    el.classList.add('active');
+    el.style.background = 'var(--color-primary-light)'; el.style.color = 'var(--color-primary)';
+    currentFilter = el.dataset.smart;
+    renderList(currentFilter);
+  });
+});
+
+renderList('all');
+renderDetail();
+</script>
+</body>
+</html>
