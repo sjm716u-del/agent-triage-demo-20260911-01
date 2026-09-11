@@ -276,4 +276,57 @@ const DB = {
     storage: { totalQuota: "50GB", usedQuota: "12.4GB", autoClean: true, cleanAfter: 30, backupFreq: "每日" },
     notification: { emailNotif: true, desktopNotif: true, soundNotif: false, digestFreq: "每日" },
   },
+
+  // ===== vivo 办公套件 Data =====
+
+  // --- vivo Office Apps ---
+  vivoApps: [
+    { id: 1, name: "vivo 文档", desc: "在线文档协作与编辑", connected: true, docs: 28, icon: "file-text", color: "#415FFF" },
+    { id: 2, name: "vivo 日历", desc: "日程管理与智能提醒", connected: true, events: 12, icon: "calendar", color: "#00C2FF" },
+    { id: 3, name: "vivo 邮件", desc: "邮件收发与智能分类", connected: true, unread: 5, icon: "mail", color: "#415FFF" },
+    { id: 4, name: "vivo 云盘", desc: "文件存储与多端同步", connected: true, used: "8.2GB", icon: "cloud", color: "#00C2FF" },
+    { id: 5, name: "vivo 会议", desc: "视频会议与屏幕共享", connected: true, upcoming: 1, icon: "video", color: "#415FFF" },
+    { id: 6, name: "vivo 记事本", desc: "灵感记录与笔记管理", connected: true, notes: 45, icon: "sticky-note", color: "#00C2FF" },
+    { id: 7, name: "vivo 联系人", desc: "通讯录与人脉管理", connected: true, contacts: 286, icon: "users", color: "#415FFF" },
+    { id: 8, name: "vivo 应用商店", desc: "应用管理与自动更新", connected: false, icon: "package", color: "#00C2FF" },
+  ],
+
+  // --- vivo Connected Devices ---
+  vivoDevices: [
+    { id: 1, name: "vivo X100 Pro", detail: "天玑9300 · 16GB · 已同步", status: "online", lastSync: "刚刚" },
+    { id: 2, name: "vivo Pad 3 Pro", detail: "天玑9300 · 12GB · 已同步", status: "online", lastSync: "2分钟前" },
+    { id: 3, name: "vivo WATCH 3", detail: "蓝山版 · 健康监测中", status: "online", lastSync: "5分钟前" },
+    { id: 4, name: "vivo TWS 4", detail: "蓝牙耳机 · 已连接", status: "online", lastSync: "实时" },
+  ],
+
+  // --- 小V Claw Chat History ---
+  vivoChatHistory: [
+    { role: "assistant", content: "你好！我是小V Claw，你的 vivo 智能办公助手。我可以帮你管理文档、日程、邮件，也可以直接在 OPC 工作台中操作。有什么我能帮你的？" },
+    { role: "user", content: "帮我看看今天有什么日程安排" },
+    { role: "assistant", content: "今天你有 3 个日程：\n\n1. 14:00 - 产品评审会议（vivo 会议）\n2. 16:30 - 客户李总电话沟通\n3. 19:00 - 内容选题周会\n\n其中产品评审会议的文档已经通过 vivo 文档共享给参会人员，你可以直接在会议中打开。需要我帮你做什么准备吗？" },
+    { role: "user", content: "帮我生成一份会议纪要模板" },
+    { role: "assistant", content: "已为你创建会议纪要模板！我已在 vivo 文档中生成了「产品评审会议-纪要模板」，包含以下模块：\n\n- 会议基本信息（时间/参会人/议题）\n- 讨论要点记录\n- 决策事项\n- 待办任务分配\n- 下次会议预告\n\n你可以点击这里直接打开编辑。需要我把今天的会议信息自动填充进去吗？" },
+  ],
+
+  // --- 小V Claw Quick Actions ---
+  vivoQuickActions: [
+    "查看今日日程",
+    "检查未读邮件",
+    "创建会议邀请",
+    "同步文件到云盘",
+    "生成工作周报",
+    "翻译最近文档",
+    "查找联系人",
+    "设置日程提醒",
+  ],
+
+  // --- 小V Claw Capabilities ---
+  vivoCapabilities: [
+    { name: "跨端协同", desc: "手机/平板/手表无缝流转", icon: "link" },
+    { name: "文档协作", desc: "多人实时编辑与评论", icon: "file-text" },
+    { name: "智能日程", desc: "AI 自动排期与冲突检测", icon: "calendar" },
+    { name: "语音转写", desc: "会议录音实时转文字", icon: "mic" },
+    { name: "邮件助手", desc: "AI 摘要与智能回复", icon: "mail" },
+    { name: "文件互传", desc: "设备间快速传输文件", icon: "share" },
+  ],
 };
