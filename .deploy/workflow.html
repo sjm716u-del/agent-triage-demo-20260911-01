@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OPC 一人公司工作台 - 工作流编辑器</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Active nav state (required) */
+    body[data-page="workflow"] .nav-item[data-nav="workflow"] { background: var(--color-primary-light); color: var(--color-primary); }
+    body[data-page="workflow"] .nav-item[data-nav="workflow"]::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--color-primary); border-radius: 0 3px 3px 0; }
+
+    /* --- Page-specific: workflow editor --- */
+    .wf-layout { display: flex; gap: 16px; align-items: stretch; }
+    .wf-node-lib { width: 240px; flex-shrink: 0; display: flex; flex-direction: column; }
+    .wf-node-lib .card-header { padding: 12px 16px; }
+    .wf-lib-search { position: relative; margin: 0 12px 8px; }
+    .wf-lib-search input { width: 100%; height: 30px; padding: 0 10px 0 28px; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); font-size: 12px; outline: none; transition: border-color var(--transition); }
+    .wf-lib-search input:focus { border-color: var(--color-primary); }
+    .wf-lib-search svg { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); width: 13px; height: 13px; color: var(--color-text-muted); }
+    .wf-lib-list { flex: 1; min-height: 0; overflow-y: auto; padding-top: 4px; padding-bottom: 8px; }
+    .wf-lib-cat { font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 1px; padding: 10px 12px 4px; }
+    .wf-lib-item { display: flex; align-items: center; gap: 8px; padding: 7px 8px; margin: 0 4px; border-radius: var(--radius-sm); border: 1px solid transparent; cursor: grab; transition: all var(--transition); }
+    .wf-lib-item:hover { background: var(--color-surface-hover); border-color: var(--color-border); }
+    .wf-lib-item:active { cursor: grabbing; }
+    .wf-lib-icon { width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .wf-lib-icon svg { width: 13px; height: 13px; color: #fff; }
+    .wf-lib-item span { font-size: 12px; }
+
+    .wf-canvas-area { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+    .wf-canvas-area .card-header { padding: 12px 16px; }
+    .wf-canvas { flex: 1; overflow: auto; min-height: 600px; background: var(--color-bg-alt); }
+    .wf-canvas-inner { position: relative; width: 1240px; height: 600px; background-image: linear-gradient(rgba(99,102,241,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,.05) 1px, transparent 1px); background-size: 24px 24px; }
+    #wfSvg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+    .wf-node { z-index: 2; width: 160px; }
+    .wf-node.selected { border-color: var(--color-primary); box-shadow: var(--shadow-glow); }
+    .wf-node-icon svg { color: #fff; }
+
+    .wf-config { width: 280px; flex-shrink: 0; }
+    .wf-config .card-header { padding: 12px 16px; }
+    .wf-config-body { padding: 16px; }
+    .wf-field { margin-bottom: 16px; }
+    .wf-label { display: block; font-size: 12px; color: var(--color-text-sub); margin-bottom: 6px; }
+    .wf-input, .wf-select, .wf-textarea { width: 100%; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text); font-size: 13px; padding: 8px 10px; outline: none; transition: border-color var(--transition); }
+    .wf-input:focus, .wf-select:focus, .wf-textarea:focus { border-color: var(--color-primary); }
+    .wf-textarea { min-height: 72px; resize: vertical; font-family: inherit; line-height: 1.5; }
+    .wf-io-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; }
+    .tpl-badge { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tpl-badge svg { color: #fff; }
+  </style>
+</head>
+<body data-page="workflow" data-theme="indigo">
+<div class="app-shell">
+  <!-- ===== App Nav (frozen — paste verbatim) ===== -->
+  <aside class="app-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="nav-logo-text">OPC Workbench</span>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">主菜单</div>
+      <a href="index.html" class="nav-item" data-nav="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+        <span class="nav-item-text">工作台</span>
+      </a>
+      <a href="creation.html" class="nav-item" data-nav="creation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+        <span class="nav-item-text">AI 创作</span>
+      </a>
+      <a href="workflow.html" class="nav-item" data-nav="workflow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>
+        <span class="nav-item-text">工作流</span>
+      </a>
+      <a href="distribute.html" class="nav-item" data-nav="distribute">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        <span class="nav-item-text">分发</span>
+      </a>
+      <a href="inbox.html" class="nav-item" data-nav="inbox">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+        <span class="nav-item-text">消息</span>
+        <span class="nav-item-badge">3</span>
+      </a>
+      <a href="analytics.html" class="nav-item" data-nav="analytics">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+        <span class="nav-item-text">数据</span>
+      </a>
+      <div class="nav-separator"></div>
+      <div class="nav-section-label">vivo 生态</div>
+      <a href="vivo.html" class="nav-item" data-nav="vivo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+        <span class="nav-item-text">vivo 办公套件</span>
+      </a>
+    </div>
+    <div class="nav-footer">
+      <div class="nav-user">
+        <div class="nav-user-avatar">CY</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name">陈逸飞</div>
+          <div class="nav-user-plan">Pro+ 会员</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- ===== Main Content ===== -->
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="topbar-search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="搜索任务、内容、平台…">
+      </div>
+      <div class="topbar-actions">
+        <div class="theme-switcher">
+          <div class="theme-dot active" data-set="indigo" onclick="setTheme('indigo', this)"></div>
+          <div class="theme-dot" data-set="neon" onclick="setTheme('neon', this)"></div>
+          <div class="theme-dot" data-set="cyber" onclick="setTheme('cyber', this)"></div>
+          <div class="theme-dot" data-set="ocean" onclick="setTheme('ocean', this)"></div>
+        </div>
+        <button class="topbar-btn tooltip" data-tip="新建任务">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="通知">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.274 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645l.435 1.305a5 5 0 0 0 3.03 3.03l1.305.435a1 1 0 0 1 0 1.89l-1.305.435a5 5 0 0 0-3.03 3.03l-.435 1.305a1 1 0 0 1-1.89 0l-.435-1.305a5 5 0 0 0-3.03-3.03l-1.305-.435a1 1 0 0 1 0-1.89l1.305-.435a5 5 0 0 0 3.03-3.03z"/><path d="M9 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645"/></svg>
+          <span class="topbar-btn-dot"></span>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="设置">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </header>
+    <!-- PAGE-SPECIFIC CONTENT GOES IN .page-content BELOW -->
+    <div class="page-content">
+      <!-- ===== Page Header ===== -->
+      <div class="page-header animate-in">
+        <div>
+          <h1 class="page-title">工作流编辑器</h1>
+          <div class="page-subtitle">可视化自动化编排 · 让 AI 替你工作</div>
+        </div>
+        <div class="flex gap-12">
+          <button class="btn btn-secondary" id="runTestBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            运行测试
+          </button>
+          <button class="btn btn-primary" id="saveWfBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>
+            保存工作流
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== Editor: Node Library + Canvas + Config ===== -->
+      <div class="wf-layout mb-24">
+        <!-- Node Library -->
+        <div class="card wf-node-lib animate-in">
+          <div class="card-header">
+            <span class="card-title" style="font-size:14px;">节点库</span>
+            <span class="tag tag-neutral">拖拽到画布</span>
+          </div>
+          <div class="wf-lib-search">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="wfLibSearch" placeholder="搜索节点…">
+          </div>
+          <div class="wf-lib-list" id="wfNodeLib"></div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="card wf-canvas-area animate-in">
+          <div class="card-header">
+            <div class="flex items-center gap-8">
+              <span class="card-title">工作流画布</span>
+              <span class="tag tag-info">每日短视频自动发布</span>
+              <span class="tag tag-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" fill="currentColor"/></svg>
+                运行中
+              </span>
+            </div>
+            <div class="flex gap-8">
+              <button class="btn btn-ghost btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+                缩放
+              </button>
+              <button class="btn btn-ghost btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+                适应
+              </button>
+            </div>
+          </div>
+          <div class="wf-canvas">
+            <div class="wf-canvas-inner" id="wfCanvasInner">
+              <svg id="wfSvg" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#06B6D4"></polygon>
+                  </marker>
+                  <linearGradient id="edgeGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#6366F1" stop-opacity="0.85"></stop>
+                    <stop offset="100%" stop-color="#06B6D4" stop-opacity="0.95"></stop>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node Config Panel -->
+        <div class="card wf-config animate-in">
+          <div class="card-header">
+            <span class="card-title">节点配置</span>
+            <span class="tag tag-primary" id="cfgType">AI 执行</span>
+          </div>
+          <div class="wf-config-body">
+            <div class="wf-field">
+              <label class="wf-label">节点名称</label>
+              <input type="text" class="wf-input" id="cfgName" value="可灵AI视频">
+            </div>
+            <div class="wf-field">
+              <label class="wf-label">执行工具</label>
+              <select class="wf-select" id="cfgTool">
+                <option selected>可灵AI · 视频生成</option>
+                <option>即梦AI · 图片生成</option>
+                <option>豆包 · 文本生成</option>
+                <option>Azure TTS · 语音合成</option>
+              </select>
+            </div>
+            <div class="wf-field">
+              <label class="wf-label">提示词参数</label>
+              <textarea class="wf-textarea" id="cfgPrompt">生成5秒AI教育短视频，画面清晰、节奏明快，突出"未来课堂"主题，竖屏构图</textarea>
+            </div>
+            <div class="flex gap-12">
+              <div class="wf-field flex-1">
+                <label class="wf-label">时长</label>
+                <input type="text" class="wf-input" value="5 秒">
+              </div>
+              <div class="wf-field flex-1">
+                <label class="wf-label">分辨率</label>
+                <select class="wf-select"><option>1080×1920</option><option>1920×1080</option></select>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <div class="wf-io-row">
+              <span class="text-sm text-sub">输入</span>
+              <span class="tag tag-info">文本 + 图片</span>
+            </div>
+            <div class="wf-io-row">
+              <span class="text-sm text-sub">输出</span>
+              <span class="tag tag-success">视频 MP4</span>
+            </div>
+            <div class="wf-io-row">
+              <span class="text-sm text-sub">预计耗时</span>
+              <span class="text-md font-semibold">~45 秒</span>
+            </div>
+            <button class="btn btn-primary btn-sm mt-16" style="width:100%;justify-content:center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              立即测试节点
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Workflow Templates ===== -->
+      <div class="flex items-center justify-between mb-16">
+        <h2 class="text-xl font-semibold">工作流模板</h2>
+        <span class="text-sm text-sub">从模板快速创建，开箱即用</span>
+      </div>
+      <div class="grid grid-3" id="wfTemplates"></div>
+    </div>
+  </div>
+</div>
+<script src="mock.js"></script>
+<script src="api.js"></script>
+<script>
+// Theme switcher
+function setTheme(name, el) {
+  document.body.setAttribute('data-theme', name);
+  try { localStorage.setItem('opc-theme', name); } catch(e) {}
+  document.querySelectorAll('.theme-dot').forEach(function(d) { d.classList.remove('active'); });
+  if (el) el.classList.add('active');
+  else {
+    var match = document.querySelector('.theme-dot[data-set="' + name + '"]');
+    if (match) match.classList.add('active');
+  }
+}
+// Restore saved theme
+try {
+  var saved = localStorage.getItem('opc-theme');
+  if (saved && saved !== 'indigo') {
+    setTheme(saved);
+  }
+} catch(e) {}
+</script>
+<script>
+(function () {
+  // ===== Inline SVG icon paths (Lucide style) =====
+  var ICON_PATHS = {
+    clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+    webhook: '<path d="M9 17H7A5 5 0 0 1 7 7"/><path d="M15 7h2a5 5 0 0 1 0 10"/><path d="m8 11-3 2 3 2"/><path d="m16 13 3-2-3-2"/>',
+    zap: '<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
+    cursor: '<path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/>',
+    pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+    image: '<rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.5-3.5a2 2 0 0 0-2.7 0L3 21"/>',
+    video: '<path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2"/>',
+    mic: '<path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/>',
+    code: '<path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/>',
+    send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
+    database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
+    message: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/>',
+    sliders: '<line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/>',
+    'git-branch': '<line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+    repeat: '<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+    timer: '<line x1="10" x2="14" y1="2" y2="2"/><circle cx="12" cy="14" r="8"/><path d="M12 10v4l2 2"/>',
+    layers: '<path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/>',
+    'git-merge': '<circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 9v6a4 4 0 0 0 4 4h4"/>',
+    'shield-check': '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+    'check-check': '<path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/>',
+    'file-text': '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v5h5"/><path d="M8 13h8"/><path d="M8 17h5"/>',
+    film: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 3v18"/><path d="M3 7.5h4"/><path d="M3 12h18"/><path d="M3 16.5h4"/><path d="M17 3v18"/><path d="M17 7.5h4"/><path d="M17 16.5h4"/>',
+    'book-open': '<path d="M12 7v14"/><path d="M3 5a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h6a2 2 0 0 1 2 2 2 2 0 0 1 2-2h6a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-6a2 2 0 0 0-2 2 2 2 0 0 0-2-2Z"/>',
+    'git-pull-request': '<circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M6 9v6a4 4 0 0 0 4 4h4"/><path d="M15 9V7a2 2 0 0 0-2-2h-2"/><path d="M18 9V3"/><path d="m15 6 3 3 3-3"/>'
+  };
+
+  function icon(name, size) {
+    size = size || 24;
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (ICON_PATHS[name] || '') + '</svg>';
+  }
+
+  // ===== Node library data =====
+  var NODE_LIB = [
+    { cat: '触发器', color: '#F59E0B', items: [
+      { name: '定时触发', icon: 'clock' },
+      { name: 'Webhook', icon: 'webhook' },
+      { name: '事件触发', icon: 'zap' },
+      { name: '手动触发', icon: 'cursor' }
+    ]},
+    { cat: 'AI 执行', color: '#6366F1', items: [
+      { name: '文本生成(豆包)', icon: 'pen' },
+      { name: '图片生成(即梦)', icon: 'image' },
+      { name: '视频生成(可灵)', icon: 'video' },
+      { name: '音频生成(TTS)', icon: 'mic' },
+      { name: '代码执行(Trae)', icon: 'code' }
+    ]},
+    { cat: '平台操作', color: '#06B6D4', items: [
+      { name: '发布内容', icon: 'send' },
+      { name: '获取数据', icon: 'database' },
+      { name: '发送消息', icon: 'message' },
+      { name: '管理操作', icon: 'sliders' }
+    ]},
+    { cat: '逻辑控制', color: '#10B981', items: [
+      { name: '条件分支', icon: 'git-branch' },
+      { name: '循环', icon: 'repeat' },
+      { name: '延时', icon: 'timer' },
+      { name: '并行', icon: 'layers' },
+      { name: '合并', icon: 'git-merge' }
+    ]},
+    { cat: '人工审批', color: '#EF4444', items: [
+      { name: '内容审核', icon: 'shield-check' },
+      { name: '发布确认', icon: 'check-check' }
+    ]}
+  ];
+
+  // ===== Render node library =====
+  var libEl = document.getElementById('wfNodeLib');
+  NODE_LIB.forEach(function (cat) {
+    var catEl = document.createElement('div');
+    catEl.className = 'wf-lib-cat';
+    catEl.textContent = cat.cat;
+    libEl.appendChild(catEl);
+    cat.items.forEach(function (it) {
+      var item = document.createElement('div');
+      item.className = 'wf-lib-item';
+      item.setAttribute('draggable', 'true');
+      item.innerHTML = '<div class="wf-lib-icon" style="background:' + cat.color + '">' + icon(it.icon) + '</div><span>' + it.name + '</span>';
+      libEl.appendChild(item);
+    });
+  });
+
+  // Library search filter
+  document.getElementById('wfLibSearch').addEventListener('input', function (e) {
+    var q = e.target.value.trim().toLowerCase();
+    var items = libEl.querySelectorAll('.wf-lib-item');
+    items.forEach(function (el) {
+      var text = el.querySelector('span').textContent.toLowerCase();
+      el.style.display = (q === '' || text.indexOf(q) > -1) ? '' : 'none';
+    });
+    libEl.querySelectorAll('.wf-lib-cat').forEach(function (c) {
+      var anyVisible = false;
+      var n = c.nextElementSibling;
+      while (n && !n.classList.contains('wf-lib-cat')) {
+        if (n.classList.contains('wf-lib-item') && n.style.display !== 'none') { anyVisible = true; break; }
+        n = n.nextElementSibling;
+      }
+      c.style.display = anyVisible ? '' : 'none';
+    });
+  });
+
+  // ===== Render workflow nodes =====
+  var canvas = document.getElementById('wfCanvasInner');
+  var svg = document.getElementById('wfSvg');
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+
+  DB.wfNodes.forEach(function (n) {
+    var node = document.createElement('div');
+    node.className = 'wf-node';
+    node.dataset.id = n.id;
+    node.style.left = n.x + 'px';
+    node.style.top = n.y + 'px';
+    if (n.id === 'ai3') node.classList.add('selected'); // pre-select demo node
+    node.innerHTML =
+      '<span class="wf-node-dot in"></span>' +
+      '<span class="wf-node-dot out"></span>' +
+      '<div class="wf-node-header">' +
+        '<div class="wf-node-icon" style="background:' + n.color + '">' + icon(n.icon) + '</div>' +
+        '<div>' +
+          '<div class="wf-node-title">' + n.title + '</div>' +
+          '<div class="wf-node-sub">' + n.sub + '</div>' +
+        '</div>' +
+      '</div>';
+    canvas.appendChild(node);
+  });
+
+  // ===== Draw connection edges (bezier) =====
+  function drawEdges() {
+    // remove old paths (keep <defs>)
+    Array.prototype.forEach.call(svg.querySelectorAll('path'), function (p) { p.remove(); });
+    var lookup = {};
+    DB.wfNodes.forEach(function (n) {
+      var el = canvas.querySelector('.wf-node[data-id="' + n.id + '"]');
+      if (el) lookup[n.id] = { el: el, n: n };
+    });
+    DB.wfEdges.forEach(function (e) {
+      var a = lookup[e.from], b = lookup[e.to];
+      if (!a || !b) return;
+      var aw = a.el.offsetWidth, ah = a.el.offsetHeight;
+      var bw = b.el.offsetWidth, bh = b.el.offsetHeight;
+      var x1 = a.n.x + aw, y1 = a.n.y + ah / 2;
+      var x2 = b.n.x, y2 = b.n.y + bh / 2;
+      var d = 'M ' + x1 + ' ' + y1 + ' C ' + (x1 + 50) + ' ' + y1 + ', ' + (x2 - 50) + ' ' + y2 + ', ' + x2 + ' ' + y2;
+      var path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', d);
+      path.setAttribute('stroke', 'url(#edgeGrad)');
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('fill', 'none');
+      path.setAttribute('marker-end', 'url(#arrowhead)');
+      svg.appendChild(path);
+    });
+  }
+  // wait a frame so nodes have measured layout
+  requestAnimationFrame(drawEdges);
+  if (window.ResizeObserver) {
+    new ResizeObserver(drawEdges).observe(canvas);
+  }
+  window.addEventListener('resize', drawEdges);
+
+  // ===== Node selection =====
+  var cfgName = document.getElementById('cfgName');
+  var cfgTool = document.getElementById('cfgTool');
+  var cfgPrompt = document.getElementById('cfgPrompt');
+  var cfgType = document.getElementById('cfgType');
+  var TYPE_LABELS = { trigger: '触发器', ai: 'AI 执行', logic: '逻辑控制', action: '平台操作' };
+
+  canvas.addEventListener('click', function (e) {
+    var node = e.target.closest('.wf-node');
+    Array.prototype.forEach.call(canvas.querySelectorAll('.wf-node.selected'), function (n) { n.classList.remove('selected'); });
+    if (!node) return;
+    node.classList.add('selected');
+    var data = DB.wfNodes.filter(function (x) { return x.id === node.dataset.id; })[0];
+    if (data) {
+      cfgName.value = data.title;
+      cfgType.textContent = TYPE_LABELS[data.type] || '节点';
+      if (data.id === 'ai3') { cfgTool.value = '可灵AI · 视频生成'; }
+      else if (data.id === 'ai1') { cfgTool.value = '豆包 · 文本生成'; }
+      else if (data.id === 'ai2') { cfgTool.value = '即梦AI · 图片生成'; }
+      else if (data.id === 'ai4') { cfgTool.value = 'Azure TTS · 语音合成'; }
+    }
+  });
+
+  // ===== Render templates =====
+  var tplEl = document.getElementById('wfTemplates');
+  var TPL_COLORS = ['var(--color-primary)', 'var(--color-accent)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-danger)', 'var(--color-primary)'];
+  DB.wfTemplates.forEach(function (t, i) {
+    var c = TPL_COLORS[i % TPL_COLORS.length];
+    var card = document.createElement('div');
+    card.className = 'card animate-in';
+    card.innerHTML =
+      '<div class="card-body">' +
+        '<div class="flex items-center gap-12 mb-8">' +
+          '<div class="tpl-badge" style="background:' + c + '">' + icon(t.icon, 18) + '</div>' +
+          '<div class="flex-1"><div class="font-semibold text-md">' + t.name + '</div></div>' +
+        '</div>' +
+        '<div class="text-sm text-sub" style="line-height:1.6;min-height:42px;">' + t.desc + '</div>' +
+        '<div class="flex items-center justify-between mt-16 mb-16">' +
+          '<span class="tag tag-info">' + t.trigger + '</span>' +
+          '<span class="text-sm text-muted">已运行 ' + t.runs + ' 次</span>' +
+        '</div>' +
+        '<button class="btn btn-secondary btn-sm" style="width:100%;justify-content:center;">使用模板</button>' +
+      '</div>';
+    tplEl.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>

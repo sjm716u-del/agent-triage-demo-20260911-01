@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPC 一人公司工作台 - vivo 办公套件</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body[data-page="vivo"] .nav-item[data-nav="vivo"] { background: var(--color-primary-light); color: var(--color-primary); }
+body[data-page="vivo"] .nav-item[data-nav="vivo"]::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--color-primary); border-radius: 0 3px 3px 0; }
+.vivo-page-content { display: flex; gap: 20px; height: 100%; overflow: hidden; }
+.vivo-left { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.vivo-right { width: 340px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; flex-shrink: 0; }
+</style>
+</head>
+<body data-page="vivo" data-theme="indigo">
+<div class="app-shell">
+  <!-- ===== App Nav (frozen — paste verbatim) ===== -->
+  <aside class="app-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="nav-logo-text">OPC Workbench</span>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">主菜单</div>
+      <a href="index.html" class="nav-item" data-nav="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+        <span class="nav-item-text">工作台</span>
+      </a>
+      <a href="creation.html" class="nav-item" data-nav="creation">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+        <span class="nav-item-text">AI 创作</span>
+      </a>
+      <a href="workflow.html" class="nav-item" data-nav="workflow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>
+        <span class="nav-item-text">工作流</span>
+      </a>
+      <a href="distribute.html" class="nav-item" data-nav="distribute">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+        <span class="nav-item-text">分发</span>
+      </a>
+      <a href="inbox.html" class="nav-item" data-nav="inbox">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+        <span class="nav-item-text">消息</span>
+        <span class="nav-item-badge">3</span>
+      </a>
+      <a href="analytics.html" class="nav-item" data-nav="analytics">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+        <span class="nav-item-text">数据</span>
+      </a>
+      <div class="nav-separator"></div>
+      <div class="nav-section-label">vivo 生态</div>
+      <a href="vivo.html" class="nav-item" data-nav="vivo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+        <span class="nav-item-text">vivo 办公套件</span>
+      </a>
+    </div>
+    <div class="nav-footer">
+      <div class="nav-user">
+        <div class="nav-user-avatar">CY</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name">陈逸飞</div>
+          <div class="nav-user-plan">Pro+ 会员</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <!-- ===== Main Content ===== -->
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="topbar-search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="搜索任务、内容、平台…">
+      </div>
+      <div class="topbar-actions">
+        <div class="theme-switcher">
+          <div class="theme-dot active" data-set="indigo" onclick="setTheme('indigo', this)"></div>
+          <div class="theme-dot" data-set="neon" onclick="setTheme('neon', this)"></div>
+          <div class="theme-dot" data-set="cyber" onclick="setTheme('cyber', this)"></div>
+          <div class="theme-dot" data-set="ocean" onclick="setTheme('ocean', this)"></div>
+        </div>
+        <button class="topbar-btn tooltip" data-tip="新建任务">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="通知">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.274 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645l.435 1.305a5 5 0 0 0 3.03 3.03l1.305.435a1 1 0 0 1 0 1.89l-1.305.435a5 5 0 0 0-3.03 3.03l-.435 1.305a1 1 0 0 1-1.89 0l-.435-1.305a5 5 0 0 0-3.03-3.03l-1.305-.435a1 1 0 0 1 0-1.89l1.305-.435a5 5 0 0 0 3.03-3.03z"/></svg>
+          <span class="topbar-btn-dot"></span>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="设置">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </header>
+    <!-- ===== Page Content ===== -->
+    <div class="page-content" style="padding: 0; overflow: hidden;">
+      <div class="vivo-page-content">
+        <!-- ===== Left: 小V Claw Chat ===== -->
+        <div class="vivo-left animate-in">
+          <div class="chat-container" style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 0; height: 100%;">
+            <!-- Chat Header -->
+            <div class="chat-header">
+              <div class="chat-logo">vC</div>
+              <div>
+                <div class="chat-title">小V Claw</div>
+                <div class="chat-subtitle">vivo 智能办公助手 · 已连接 vivo 生态</div>
+              </div>
+              <div class="chat-status">
+                <span class="status-dot online"></span>
+                在线
+              </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="chat-messages" id="chatMessages"></div>
+
+            <!-- Quick Actions -->
+            <div class="chat-quick-actions" id="quickActions"></div>
+
+            <!-- Chat Input -->
+            <div class="chat-input-area">
+              <textarea class="chat-input" id="chatInput" placeholder="和小V Claw 对话，输入你的需求…" rows="1"></textarea>
+              <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== Right: vivo 办公套件面板 ===== -->
+        <div class="vivo-right">
+          <!-- Page Title -->
+          <div class="animate-in">
+            <div class="page-title" style="font-size: 20px;">vivo 办公套件</div>
+            <div class="page-subtitle" style="font-size: 12px;">vivo 生态深度集成 · 跨端协同办公</div>
+          </div>
+
+          <!-- vivo Apps Grid -->
+          <div class="card animate-in">
+            <div class="card-header">
+              <div class="card-title">办公应用</div>
+              <span class="tag tag-info">7/8 已连接</span>
+            </div>
+            <div class="card-body" style="padding: 16px;">
+              <div class="grid grid-2" id="vivoAppsGrid" style="gap: 12px;"></div>
+            </div>
+          </div>
+
+          <!-- Connected Devices -->
+          <div class="card animate-in">
+            <div class="card-header">
+              <div class="card-title">已连接设备</div>
+              <span class="tag tag-success">4 台在线</span>
+            </div>
+            <div class="card-body" style="padding: 12px;">
+              <div class="flex flex-col gap-8" id="deviceList"></div>
+            </div>
+          </div>
+
+          <!-- 小V Claw Capabilities -->
+          <div class="glass-card animate-in">
+            <div class="card-title mb-16">小V Claw 能力</div>
+            <div class="flex flex-col gap-12" id="capabilityList"></div>
+          </div>
+
+          <!-- Sync Status -->
+          <div class="glass-card animate-in" style="text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;">
+              <span class="status-dot online"></span>
+              <span class="text-md font-semibold">全设备已同步</span>
+            </div>
+            <div class="text-sm text-sub mb-8">上次同步: 刚刚</div>
+            <div class="progress" style="height: 4px;">
+              <div class="progress-bar" style="width: 100%;"></div>
+            </div>
+            <div class="text-sm text-muted mt-8">vivo X100 Pro · vivo Pad 3 Pro · WATCH 3 · TWS 4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="mock.js"></script>
+<script src="api.js"></script>
+<script>
+// Theme switcher
+function setTheme(name, el) {
+  document.body.setAttribute('data-theme', name);
+  try { localStorage.setItem('opc-theme', name); } catch(e) {}
+  document.querySelectorAll('.theme-dot').forEach(function(d) { d.classList.remove('active'); });
+  if (el) el.classList.add('active');
+  else {
+    var match = document.querySelector('.theme-dot[data-set="' + name + '"]');
+    if (match) match.classList.add('active');
+  }
+}
+try {
+  var saved = localStorage.getItem('opc-theme');
+  if (saved && saved !== 'indigo') { setTheme(saved); }
+} catch(e) {}
+</script>
+<script>
+(function() {
+  // --- Icon Map ---
+  var iconMap = {
+    'file-text': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>',
+    'calendar': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 2v4"/><path d="M16 2v4"/></svg>',
+    'mail': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-10 5L2 7"/><rect width="20" height="14" x="2" y="5" rx="2"/></svg>',
+    'cloud': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>',
+    'video': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 8-6 4 6 4V8Z"/><rect width="14" height="12" x="2" y="6" rx="2"/></svg>',
+    'sticky-note': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11l5-5V5a2 2 0 0 0-2-2z"/><path d="M15 21v-5a1 1 0 0 1 1-1h4"/></svg>',
+    'users': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    'package': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>',
+    'link': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+    'mic': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg>',
+    'share': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg>',
+    'smartphone': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>',
+    'tablet': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M12 18h.01"/></svg>',
+    'watch': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6"/><path d="M12 10v2l1 1"/><path d="M16.13 7.66l-.81-4.05a2 2 0 0 0-2-1.61h-2.68a2 2 0 0 0-2 1.61l-.78 4.05"/><path d="M7.88 16.36l.8 4a2 2 0 0 0 2 1.61h2.72a2 2 0 0 0 2-1.61l.81-4.05"/></svg>',
+    'headphones': '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H4a1 1 0 0 1-1-1v-6a9 9 0 0 1 18 0v6a1 1 0 0 1-1 1h-2a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"/></svg>'
+  };
+
+  var deviceIconMap = {
+    1: 'smartphone', 2: 'tablet', 3: 'watch', 4: 'headphones'
+  };
+
+  // --- Render Chat History ---
+  var chatMessages = document.getElementById('chatMessages');
+  DB.vivoChatHistory.forEach(function(msg) {
+    var isAssistant = msg.role === 'assistant';
+    var div = document.createElement('div');
+    div.className = 'chat-msg ' + (isAssistant ? 'assistant' : 'user');
+    div.innerHTML =
+      '<div class="chat-msg-avatar ' + (isAssistant ? 'assistant' : 'user') + '">' + (isAssistant ? 'vC' : 'CY') + '</div>' +
+      '<div class="chat-msg-bubble">' + msg.content.replace(/\n/g, '<br>') + '</div>';
+    chatMessages.appendChild(div);
+  });
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  // --- Render Quick Actions ---
+  var quickActions = document.getElementById('quickActions');
+  DB.vivoQuickActions.forEach(function(action) {
+    var btn = document.createElement('button');
+    btn.className = 'chat-quick-btn';
+    btn.textContent = action;
+    btn.onclick = function() {
+      var input = document.getElementById('chatInput');
+      input.value = action;
+      input.focus();
+    };
+    quickActions.appendChild(btn);
+  });
+
+  // --- Render vivo Apps ---
+  var appsGrid = document.getElementById('vivoAppsGrid');
+  DB.vivoApps.forEach(function(app) {
+    var card = document.createElement('div');
+    card.className = 'vivo-app-card';
+    var statText = '';
+    if (app.connected) {
+      if (app.docs !== undefined) statText = app.docs + ' 个文档';
+      else if (app.events !== undefined) statText = app.events + ' 个日程';
+      else if (app.unread !== undefined) statText = app.unread + ' 封未读';
+      else if (app.used !== undefined) statText = '已用 ' + app.used;
+      else if (app.upcoming !== undefined) statText = app.upcoming + ' 个待开';
+      else if (app.notes !== undefined) statText = app.notes + ' 条笔记';
+      else if (app.contacts !== undefined) statText = app.contacts + ' 个联系人';
+    } else {
+      statText = '未连接';
+    }
+    card.innerHTML =
+      '<div class="vivo-app-icon" style="background:' + app.color + '20; color:' + app.color + ';">' + (iconMap[app.icon] || '') + '</div>' +
+      '<div class="vivo-app-name">' + app.name + '</div>' +
+      '<div class="vivo-app-desc">' + app.desc + '</div>' +
+      '<div class="vivo-app-footer">' +
+        '<div class="vivo-app-status">' +
+          '<span class="status-dot ' + (app.connected ? 'online' : 'offline') + '"></span>' +
+          '<span style="color:' + (app.connected ? 'var(--color-success)' : 'var(--color-text-muted)') + ';">' + (app.connected ? '已连接' : '未连接') + '</span>' +
+        '</div>' +
+        '<span class="text-sm text-muted">' + statText + '</span>' +
+      '</div>';
+    appsGrid.appendChild(card);
+  });
+
+  // --- Render Devices ---
+  var deviceList = document.getElementById('deviceList');
+  DB.vivoDevices.forEach(function(dev) {
+    var div = document.createElement('div');
+    div.className = 'device-card';
+    div.innerHTML =
+      '<div class="device-icon">' + (iconMap[deviceIconMap[dev.id]] || iconMap['smartphone']) + '</div>' +
+      '<div class="device-info">' +
+        '<div class="device-name">' + dev.name + '</div>' +
+        '<div class="device-detail">' + dev.detail + '</div>' +
+      '</div>' +
+      '<div style="text-align:right;">' +
+        '<div class="flex items-center gap-4" style="justify-content:flex-end;">' +
+          '<span class="status-dot online"></span>' +
+          '<span class="text-sm text-success">在线</span>' +
+        '</div>' +
+        '<div class="text-sm text-muted" style="margin-top:2px;">同步: ' + dev.lastSync + '</div>' +
+      '</div>';
+    deviceList.appendChild(div);
+  });
+
+  // --- Render Capabilities ---
+  var capList = document.getElementById('capabilityList');
+  DB.vivoCapabilities.forEach(function(cap) {
+    var div = document.createElement('div');
+    div.style.cssText = 'display:flex;align-items:center;gap:12px;';
+    div.innerHTML =
+      '<div style="width:36px;height:36px;border-radius:8px;background:rgba(65,95,255,0.15);color:#415FFF;display:flex;align-items:center;justify-content:center;flex-shrink:0;">' + (iconMap[cap.icon] || '') + '</div>' +
+      '<div>' +
+        '<div class="text-md font-semibold">' + cap.name + '</div>' +
+        '<div class="text-sm text-sub">' + cap.desc + '</div>' +
+      '</div>';
+    capList.appendChild(div);
+  });
+
+  // --- Chat Send Function ---
+  window.sendMessage = function() {
+    var input = document.getElementById('chatInput');
+    var text = input.value.trim();
+    if (!text) return;
+
+    // Add user message
+    var userDiv = document.createElement('div');
+    userDiv.className = 'chat-msg user';
+    userDiv.innerHTML =
+      '<div class="chat-msg-avatar user">CY</div>' +
+      '<div class="chat-msg-bubble">' + text.replace(/\n/g, '<br>') + '</div>';
+    chatMessages.appendChild(userDiv);
+    input.value = '';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Show typing indicator
+    var typingDiv = document.createElement('div');
+    typingDiv.className = 'chat-msg assistant';
+    typingDiv.id = 'typingIndicator';
+    typingDiv.innerHTML =
+      '<div class="chat-msg-avatar assistant">vC</div>' +
+      '<div class="chat-msg-bubble">' +
+        '<div class="typing-indicator">' +
+          '<div class="typing-dot"></div>' +
+          '<div class="typing-dot"></div>' +
+          '<div class="typing-dot"></div>' +
+        '</div>' +
+      '</div>';
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Simulate response after 1.5s
+    setTimeout(function() {
+      var indicator = document.getElementById('typingIndicator');
+      if (indicator) indicator.remove();
+
+      var responses = [
+        '好的，我正在为你处理。已通过 vivo 文档创建相关内容，你可以随时查看和编辑。',
+        '已收到你的请求！我已经在 vivo 生态中同步了相关数据，所有设备将自动更新。',
+        '明白了。我已为你安排好相关操作，日程提醒已通过 vivo 日历设置，到时会自动通知你。',
+        '没问题！我已通过 vivo 云盘同步了所需文件，你可以在任何设备上访问。需要我帮你做其他事吗？',
+        '已完成！相关操作已通过 vivo 办公套件执行，结果已同步到你的所有设备。'
+      ];
+      var resp = responses[Math.floor(Math.random() * responses.length)];
+
+      var botDiv = document.createElement('div');
+      botDiv.className = 'chat-msg assistant';
+      botDiv.innerHTML =
+        '<div class="chat-msg-avatar assistant">vC</div>' +
+        '<div class="chat-msg-bubble">' + resp + '</div>';
+      chatMessages.appendChild(botDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 1500);
+  };
+
+  // Enter to send
+  document.getElementById('chatInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+})();
+</script>
+</body>
+</html>
