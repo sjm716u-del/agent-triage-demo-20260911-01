@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 工具配置 — OPC 管理后台</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body[data-page="admin-ai-tools"] .nav-item[data-nav="admin-ai-tools"] { background: var(--color-primary-light); color: var(--color-primary); }
+body[data-page="admin-ai-tools"] .nav-item[data-nav="admin-ai-tools"]::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--color-primary); border-radius: 0 3px 3px 0; }
+</style>
+</head>
+<body data-page="admin-ai-tools" data-theme="indigo">
+<div class="app-shell">
+  <!-- ===== Admin App Nav (frozen) ===== -->
+  <aside class="app-nav">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="nav-logo-text">OPC 管理后台</span>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">返回前台</div>
+      <a href="index.html" class="nav-item" data-nav="dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7 7 7"/><path d="M19 12v7H5v-7"/></svg>
+        <span class="nav-item-text">返回工作台</span>
+      </a>
+      <div class="nav-separator"></div>
+      <div class="nav-section-label">管理后台</div>
+      <a href="admin-users.html" class="nav-item" data-nav="admin-users">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="nav-item-text">用户管理</span>
+      </a>
+      <a href="admin-platforms.html" class="nav-item" data-nav="admin-platforms">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><path d="M2 10h20"/></svg>
+        <span class="nav-item-text">平台账号</span>
+      </a>
+      <a href="admin-ai-tools.html" class="nav-item" data-nav="admin-ai-tools">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+        <span class="nav-item-text">AI 工具配置</span>
+      </a>
+      <a href="admin-workflows.html" class="nav-item" data-nav="admin-workflows">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></svg>
+        <span class="nav-item-text">工作流管理</span>
+      </a>
+      <a href="admin-orders.html" class="nav-item" data-nav="admin-orders">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/><path d="M3 7.5 7 3v4.5"/></svg>
+        <span class="nav-item-text">订单管理</span>
+      </a>
+      <a href="admin-settings.html" class="nav-item" data-nav="admin-settings">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span class="nav-item-text">系统设置</span>
+      </a>
+      <div class="nav-separator"></div>
+      <a href="admin-logs.html" class="nav-item" data-nav="admin-logs">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M10 12H8"/><path d="M16 16H8"/><path d="M16 12H8"/></svg>
+        <span class="nav-item-text">系统日志</span>
+      </a>
+    </div>
+    <div class="nav-footer">
+      <div class="nav-user">
+        <div class="nav-user-avatar">CY</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name">陈逸飞</div>
+          <div class="nav-user-plan">管理员</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== Main Content ===== -->
+  <div class="app-main">
+    <header class="app-topbar">
+      <div class="topbar-search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" placeholder="搜索工具、Provider、模型…">
+      </div>
+      <div class="topbar-actions">
+        <div class="theme-switcher">
+          <div class="theme-dot active" data-set="indigo" onclick="setTheme('indigo', this)"></div>
+          <div class="theme-dot" data-set="emerald" onclick="setTheme('emerald', this)"></div>
+          <div class="theme-dot" data-set="amber" onclick="setTheme('amber', this)"></div>
+          <div class="theme-dot" data-set="ocean" onclick="setTheme('ocean', this)"></div>
+        </div>
+        <button class="topbar-btn tooltip" data-tip="通知">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.274 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645l.435 1.305a5 5 0 0 0 3.03 3.03l1.305.435a1 1 0 0 1 0 1.89l-1.305.435a5 5 0 0 0-3.03 3.03l-.435 1.305a1 1 0 0 1-1.89 0l-.435-1.305a5 5 0 0 0-3.03-3.03l-1.305-.435a1 1 0 0 1 0-1.89l1.305-.435a5 5 0 0 0 3.03-3.03z"/><path d="M9 3.29a1 1 0 0 1 1.452 0c.18.18.317.403.398.645"/></svg>
+          <span class="topbar-btn-dot"></span>
+        </button>
+        <button class="topbar-btn tooltip" data-tip="设置">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <!-- ===== Page Header ===== -->
+      <div class="page-header animate-in">
+        <div>
+          <div class="page-title">AI 工具配置</div>
+          <div class="page-subtitle">管理 AIGC 工具的 API 密钥、模型和用量</div>
+        </div>
+        <div class="flex gap-8">
+          <button class="btn btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+            用量报表
+          </button>
+          <button class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            添加工具
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== Row 1: Stat Cards ===== -->
+      <div class="grid grid-4 mb-24">
+        <div class="stat-card animate-in">
+          <div class="stat-card-icon" style="background: var(--color-primary-light); color: var(--color-primary);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg>
+          </div>
+          <div class="stat-card-label">已配置工具</div>
+          <div class="stat-card-value">10<span style="font-size:18px;color:var(--color-text-muted);">/12</span></div>
+          <div class="stat-card-trend" style="color: var(--color-warning);">2个未配置</div>
+        </div>
+
+        <div class="stat-card animate-in">
+          <div class="stat-card-icon" style="background: var(--color-accent-light); color: var(--color-accent);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg>
+          </div>
+          <div class="stat-card-label">本月调用</div>
+          <div class="stat-card-value">8,175<span style="font-size:14px;color:var(--color-text-muted);">次</span></div>
+          <div class="stat-card-trend up">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6-6 6 6"/><path d="M12 3v18"/></svg>
+            +1,240 较上月
+          </div>
+        </div>
+
+        <div class="stat-card animate-in">
+          <div class="stat-card-icon" style="background: var(--color-success-light); color: var(--color-success);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="stat-card-label">本月费用</div>
+          <div class="stat-card-value">¥247.50</div>
+          <div class="stat-card-trend text-sub">预估¥500/月</div>
+        </div>
+
+        <div class="stat-card animate-in">
+          <div class="stat-card-icon" style="background: var(--color-warning-light); color: var(--color-warning);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="stat-card-label">平均延迟</div>
+          <div class="stat-card-value">1.2<span style="font-size:18px;color:var(--color-text-muted);">s</span></div>
+          <div class="stat-card-trend" style="color: var(--color-success);">正常范围</div>
+        </div>
+      </div>
+
+      <!-- ===== Row 2: AI Tools Table ===== -->
+      <div class="card animate-in mb-24">
+        <div class="card-header">
+          <div class="card-title">AI 工具列表</div>
+          <div class="flex items-center gap-8 text-sm text-sub">
+            <span class="flex items-center gap-4"><span class="status-dot online"></span>已启用</span>
+            <span class="flex items-center gap-4"><span class="status-dot offline"></span>已禁用</span>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;overflow-x:auto;">
+          <table class="table" id="aiToolTable">
+            <thead>
+              <tr>
+                <th>工具</th>
+                <th>分类</th>
+                <th>Provider</th>
+                <th>API 密钥</th>
+                <th>模型</th>
+                <th>状态</th>
+                <th>本月调用</th>
+                <th>费用</th>
+                <th>速率限制</th>
+                <th style="text-align:right;">操作</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ===== Row 3: Cost Trend Chart ===== -->
+      <div class="card animate-in">
+        <div class="card-header">
+          <div class="card-title">费用趋势</div>
+          <div class="flex items-center gap-8 text-sm text-sub">
+            <span class="flex items-center gap-4"><span style="width:8px;height:8px;background:var(--color-primary);border-radius:2px;display:inline-block;"></span>月度费用</span>
+            <span class="flex items-center gap-4"><span style="width:8px;height:8px;background:var(--color-accent);border-radius:2px;display:inline-block;"></span>本月</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="flex items-end justify-between mb-16">
+            <div>
+              <div class="text-sm text-sub">近6个月 AI 工具费用合计</div>
+              <div class="text-2xl font-bold" style="font-family:var(--font-display);">¥1,097.50</div>
+            </div>
+            <div class="tag tag-success">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6-6 6 6"/><path d="M12 3v18"/></svg>
+              月均增长 6.6%
+            </div>
+          </div>
+          <div class="chart-bar" id="costChart"></div>
+          <div class="flex gap-8 mt-8" id="costLabels"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="mock.js"></script>
+<script src="api.js"></script>
+<script>
+function setTheme(name, el) {
+  document.body.setAttribute('data-theme', name);
+  try { localStorage.setItem('opc-theme', name); } catch(e) {}
+  document.querySelectorAll('.theme-dot').forEach(function(d) { d.classList.remove('active'); });
+  if (el) el.classList.add('active');
+}
+try { var saved = localStorage.getItem('opc-theme'); if (saved && saved !== 'indigo') { setTheme(saved); } } catch(e) {}
+
+// ===== Page-specific JS =====
+(function() {
+  // Merge aiToolConfigs with aiTools for color/icon
+  const toolMeta = {};
+  DB.aiTools.forEach(t => { toolMeta[t.name] = { icon: t.icon, color: t.color }; });
+
+  const categoryTagClass = {
+    'AI对话': 'tag-primary',
+    'AI编程': 'tag-info',
+    'AI助手': 'tag-success',
+    'AI绘画': 'tag-warning',
+    'AI视频': 'tag-danger',
+    'AI音频': 'tag-neutral',
+    'AI短剧': 'tag-primary',
+    'AI设计': 'tag-info'
+  };
+
+  const tbody = document.querySelector('#aiToolTable tbody');
+  DB.aiToolConfigs.forEach(t => {
+    const meta = toolMeta[t.name] || { icon: '?', color: '#64748B' };
+    const notConfigured = t.apiKey === '未配置';
+    const tr = document.createElement('tr');
+    if (notConfigured) {
+      tr.style.opacity = '0.7';
+    }
+    tr.innerHTML = `
+      <td>
+        <div class="flex items-center gap-8">
+          <span class="platform-icon" style="background:${meta.color};width:28px;height:28px;border-radius:6px;font-size:11px;">${meta.icon}</span>
+          <span class="font-medium">${t.name}</span>
+        </div>
+      </td>
+      <td><span class="tag ${categoryTagClass[t.category] || 'tag-neutral'}">${t.category}</span></td>
+      <td style="font-family:var(--font-mono);font-size:12px;color:var(--color-text-sub);">${t.provider}</td>
+      <td>
+        ${notConfigured ? '<span class="tag tag-danger">未配置</span>' : `
+        <div class="api-key-field">
+          <input class="form-input" type="password" value="${t.apiKey}" readonly style="height:28px;">
+          <button class="api-key-toggle-btn" onclick="toggleApiKey(this)" style="height:28px;width:28px;padding:0;" title="显示/隐藏密钥">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>`}
+      </td>
+      <td style="font-family:var(--font-mono);font-size:12px;color:var(--color-text-sub);">${t.model}</td>
+      <td>
+        <div class="toggle ${t.enabled ? 'on' : ''}" onclick="this.classList.toggle('on'); event.stopPropagation();" title="${t.enabled ? '点击禁用' : '点击启用'}"></div>
+      </td>
+      <td>${t.calls.toLocaleString()}</td>
+      <td class="font-semibold" style="font-family:var(--font-mono);">${t.cost}</td>
+      <td style="font-family:var(--font-mono);font-size:12px;color:var(--color-text-sub);">${t.rateLimit}</td>
+      <td style="text-align:right;">
+        <div class="flex gap-4" style="justify-content:flex-end;">
+          <button class="btn btn-secondary btn-sm" ${notConfigured ? 'style="border-color:var(--color-primary);color:var(--color-primary);"' : ''}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+            配置
+          </button>
+          <button class="btn btn-ghost btn-sm" title="用量">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+            用量
+          </button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // --- Cost Trend Chart ---
+  const costData = [
+    { month: '8月', value: 180 },
+    { month: '9月', value: 195 },
+    { month: '10月', value: 210 },
+    { month: '11月', value: 225 },
+    { month: '12月', value: 240 },
+    { month: '1月', value: 247.50, current: true }
+  ];
+  const maxVal = Math.max(...costData.map(d => d.value));
+  const chart = document.getElementById('costChart');
+  const labels = document.getElementById('costLabels');
+  costData.forEach((d) => {
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar-item' + (d.current ? ' accent' : '');
+    bar.style.height = ((d.value / maxVal) * 100) + '%';
+    bar.title = `${d.month} ¥${d.value}`;
+    bar.setAttribute('data-tip', `${d.month} ¥${d.value}`);
+    bar.classList.add('tooltip');
+    chart.appendChild(bar);
+
+    const lbl = document.createElement('div');
+    lbl.style.flex = '1';
+    lbl.style.textAlign = 'center';
+    lbl.style.fontSize = '11px';
+    lbl.style.color = d.current ? 'var(--color-accent)' : 'var(--color-text-muted)';
+    lbl.style.fontWeight = d.current ? '600' : '400';
+    lbl.textContent = d.month;
+    labels.appendChild(lbl);
+  });
+})();
+
+// ===== Toggle API Key visibility =====
+function toggleApiKey(btn) {
+  const input = btn.parentElement.querySelector('.form-input');
+  const svg = btn.querySelector('svg');
+  if (input.type === 'password') {
+    input.type = 'text';
+    svg.innerHTML = '<path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/>';
+  } else {
+    input.type = 'password';
+    svg.innerHTML = '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>';
+  }
+}
+</script>
+</body>
+</html>

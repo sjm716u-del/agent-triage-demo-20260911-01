@@ -10,7 +10,7 @@ body[data-page="inbox"] .nav-item[data-nav="inbox"] { background: var(--color-pr
 body[data-page="inbox"] .nav-item[data-nav="inbox"]::before { content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--color-primary); border-radius: 0 3px 3px 0; }
 </style>
 </head>
-<body data-page="inbox">
+<body data-page="inbox" data-theme="indigo">
 <div class="app-shell">
   <!-- ===== App Nav (frozen — paste verbatim) ===== -->
   <aside class="app-nav">
@@ -66,6 +66,12 @@ body[data-page="inbox"] .nav-item[data-nav="inbox"]::before { content: ''; posit
         <input type="text" placeholder="搜索任务、内容、平台…">
       </div>
       <div class="topbar-actions">
+        <div class="theme-switcher">
+          <div class="theme-dot active" data-set="indigo" onclick="setTheme('indigo', this)"></div>
+          <div class="theme-dot" data-set="emerald" onclick="setTheme('emerald', this)"></div>
+          <div class="theme-dot" data-set="amber" onclick="setTheme('amber', this)"></div>
+          <div class="theme-dot" data-set="ocean" onclick="setTheme('ocean', this)"></div>
+        </div>
         <button class="topbar-btn tooltip" data-tip="新建任务">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
         </button>
@@ -215,6 +221,26 @@ body[data-page="inbox"] .nav-item[data-nav="inbox"]::before { content: ''; posit
 </div>
 <script src="mock.js"></script>
 <script src="api.js"></script>
+<script>
+// Theme switcher
+function setTheme(name, el) {
+  document.body.setAttribute('data-theme', name);
+  try { localStorage.setItem('opc-theme', name); } catch(e) {}
+  document.querySelectorAll('.theme-dot').forEach(function(d) { d.classList.remove('active'); });
+  if (el) el.classList.add('active');
+  else {
+    var match = document.querySelector('.theme-dot[data-set="' + name + '"]');
+    if (match) match.classList.add('active');
+  }
+}
+// Restore saved theme
+try {
+  var saved = localStorage.getItem('opc-theme');
+  if (saved && saved !== 'indigo') {
+    setTheme(saved);
+  }
+} catch(e) {}
+</script>
 <script>
 // ===== Message List Rendering =====
 const AI_REPLIES = {

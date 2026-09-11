@@ -184,4 +184,96 @@ const DB = {
     { name: "小说连载自动发布", desc: "AI续写→审校→多平台同步发布", trigger: "定时", runs: 45, icon: "book-open" },
     { name: "周报自动生成", desc: "汇总数据→AI分析→生成报告→飞书发送", trigger: "周五 18:00", runs: 8, icon: "file-text" },
   ],
+
+  // ===== Admin Backend Data =====
+
+  // --- Admin Users ---
+  adminUsers: [
+    { id: 1, name: "陈逸飞", email: "chenyifei@opc.work", avatar: "CY", plan: "pro-plus", platforms: 12, workflows: 8, status: "active", joined: "2024-09-12", lastActive: "5分钟前" },
+    { id: 2, name: "林书瑶", email: "linshuyao@opc.work", avatar: "LS", plan: "pro", platforms: 8, workflows: 4, status: "active", joined: "2024-10-03", lastActive: "1小时前" },
+    { id: 3, name: "王浩然", email: "wanghaoran@opc.work", avatar: "WH", plan: "team", platforms: 15, workflows: 12, status: "active", joined: "2024-10-15", lastActive: "2小时前" },
+    { id: 4, name: "赵雨菲", email: "zhaoyufei@opc.work", avatar: "ZY", plan: "free", platforms: 3, workflows: 1, status: "active", joined: "2024-11-20", lastActive: "3天前" },
+    { id: 5, name: "刘思远", email: "liusiyuan@opc.work", avatar: "LS", plan: "pro", platforms: 6, workflows: 5, status: "suspended", joined: "2024-08-01", lastActive: "1周前" },
+    { id: 6, name: "黄佳琪", email: "huangjiaqi@opc.work", avatar: "HJ", plan: "free", platforms: 2, workflows: 0, status: "pending", joined: "2025-01-05", lastActive: "从未" },
+    { id: 7, name: "周明轩", email: "zhoumingxuan@opc.work", avatar: "ZM", plan: "pro-plus", platforms: 10, workflows: 7, status: "active", joined: "2024-09-28", lastActive: "30分钟前" },
+    { id: 8, name: "吴晓彤", email: "wuxiaotong@opc.work", avatar: "WX", plan: "team", platforms: 14, workflows: 9, status: "active", joined: "2024-07-14", lastActive: "10分钟前" },
+  ],
+
+  // --- Connected Platform Accounts ---
+  platformAccounts: [
+    { id: 1, platform: "抖音", icon: "DY", color: "#000", account: "陈逸飞的创作号", accountId: "dy_8847291", authType: "OAuth2", status: "online", tokenExpiry: "2025-03-15", syncFreq: "实时" },
+    { id: 2, platform: "B站", icon: "BZ", color: "#FB7299", account: "逸飞科普", accountId: "bili_39921056", authType: "OAuth2", status: "online", tokenExpiry: "2025-04-02", syncFreq: "每小时" },
+    { id: 3, platform: "小红书", icon: "XHS", color: "#FF2442", account: "逸飞种草日记", accountId: "xhs_5521083", authType: "OAuth2", status: "online", tokenExpiry: "2025-02-28", syncFreq: "实时" },
+    { id: 4, platform: "知乎", icon: "ZH", color: "#0084FF", account: "陈逸飞", accountId: "zh_1280934", authType: "OAuth2", status: "warning", tokenExpiry: "2025-01-20", syncFreq: "每小时" },
+    { id: 5, platform: "快手", icon: "KS", color: "#FF4906", account: "逸飞快创作", accountId: "ks_991208", authType: "OAuth2", status: "online", tokenExpiry: "2025-03-30", syncFreq: "实时" },
+    { id: 6, platform: "飞书", icon: "FS", color: "#3370FF", account: "OPC团队工作区", accountId: "lark_440182", authType: "OAuth2", status: "online", tokenExpiry: "长期有效", syncFreq: "实时" },
+    { id: 7, platform: "钉钉", icon: "DD", color: "#0089FF", account: "逸飞工作室", accountId: "dd_887120", authType: "OAuth2", status: "offline", tokenExpiry: "已过期", syncFreq: "-" },
+    { id: 8, platform: "企业微信", icon: "QW", color: "#07C160", account: "客户对接号", accountId: "qw_552091", authType: "OAuth2", status: "online", tokenExpiry: "2025-04-10", syncFreq: "实时" },
+    { id: 9, platform: "GitHub", icon: "GH", color: "#24292E", account: "chenyifei-dev", accountId: "gh_88291", authType: "Token", status: "online", tokenExpiry: "长期有效", syncFreq: "Webhook" },
+    { id: 10, platform: "巨量星图", icon: "XT", color: "#FF6B00", account: "逸飞创作者", accountId: "xt_66120", authType: "OAuth2", status: "online", tokenExpiry: "2025-03-01", syncFreq: "每日" },
+  ],
+
+  // --- AI Tool Configs ---
+  aiToolConfigs: [
+    { id: 1, name: "豆包", category: "AI对话", provider: "doubao", apiKey: "sk-doubao-****8421", model: "doubao-pro-32k", enabled: true, calls: 3280, cost: "¥65.60", rateLimit: "100/min" },
+    { id: 2, name: "Trae", category: "AI编程", provider: "trae", apiKey: "sk-trae-****9203", model: "trae-agent-v2", enabled: true, calls: 560, cost: "¥28.00", rateLimit: "50/min" },
+    { id: 3, name: "ChatGPT", category: "AI对话", provider: "openai", apiKey: "sk-openai-****1147", model: "gpt-4o", enabled: true, calls: 1850, cost: "$37.00", rateLimit: "60/min" },
+    { id: 4, name: "Claude", category: "AI对话", provider: "anthropic", apiKey: "sk-ant-****8821", model: "claude-sonnet-4", enabled: true, calls: 920, cost: "$18.40", rateLimit: "40/min" },
+    { id: 5, name: "WorkBuddy", category: "AI助手", provider: "workbuddy", apiKey: "wb-****4408", model: "wb-agent-v1", enabled: true, calls: 420, cost: "¥12.60", rateLimit: "30/min" },
+    { id: 6, name: "即梦AI", category: "AI绘画", provider: "jimeng", apiKey: "jm-****7702", model: "jimeng-v3", enabled: true, calls: 680, cost: "¥34.00", rateLimit: "20/min" },
+    { id: 7, name: "可灵AI", category: "AI视频", provider: "kling", apiKey: "kl-****6613", model: "kling-v2", enabled: true, calls: 240, cost: "¥48.00", rateLimit: "10/min" },
+    { id: 8, name: "Midjourney", category: "AI绘画", provider: "midjourney", apiKey: "未配置", model: "mj-v6", enabled: false, calls: 0, cost: "¥0", rateLimit: "-" },
+    { id: 9, name: "ElevenLabs", category: "AI音频", provider: "elevenlabs", apiKey: "el-****9942", model: "eleven-multilingual", enabled: true, calls: 180, cost: "$5.40", rateLimit: "5/min" },
+    { id: 10, name: "Azure TTS", category: "AI音频", provider: "azure", apiKey: "az-****3308", model: "azure-tts-v2", enabled: true, calls: 320, cost: "¥6.40", rateLimit: "100/min" },
+    { id: 11, name: "MOKI", category: "AI短剧", provider: "moki", apiKey: "mk-****5519", model: "moki-v1", enabled: true, calls: 45, cost: "¥22.50", rateLimit: "5/min" },
+    { id: 12, name: "Canva", category: "AI设计", provider: "canva", apiKey: "未配置", model: "canva-v1", enabled: false, calls: 0, cost: "¥0", rateLimit: "-" },
+  ],
+
+  // --- Admin Orders ---
+  adminOrders: [
+    { id: "XT-2025-014", platform: "巨量星图", client: "品牌A科技", type: "AI教育短视频", budget: 8000, commission: 800, deadline: "5天后", status: "进行中", assignedTo: "陈逸飞" },
+    { id: "TH-2025-031", platform: "塔猴", client: "匿名客户", type: "AI漫剧3集", budget: 9000, commission: 1350, deadline: "7天后", status: "待接单", assignedTo: "待分配" },
+    { id: "YP-2025-008", platform: "一品威客", client: "某教育机构", type: "知识科普视频", budget: 3500, commission: 350, deadline: "3天后", status: "进行中", assignedTo: "林书瑶" },
+    { id: "KS-2025-006", platform: "快手聚星", client: "品牌B美妆", type: "种草短视频", budget: 5000, commission: 500, deadline: "已交付", status: "已完成", assignedTo: "陈逸飞" },
+    { id: "XT-2025-013", platform: "巨量星图", client: "品牌C数码", type: "产品测评视频", budget: 6500, commission: 650, deadline: "10天后", status: "进行中", assignedTo: "王浩然" },
+    { id: "TH-2025-028", platform: "塔猴", client: "某MCN机构", type: "AI短剧5集", budget: 15000, commission: 2250, deadline: "14天后", status: "待接单", assignedTo: "待分配" },
+    { id: "YP-2025-006", platform: "一品威客", client: "某餐饮品牌", type: "探店短视频", budget: 2800, commission: 280, deadline: "已交付", status: "已结算", assignedTo: "周明轩" },
+    { id: "KS-2025-004", platform: "快手聚星", client: "品牌D服饰", type: "穿搭种草", budget: 4200, commission: 420, deadline: "2天后", status: "进行中", assignedTo: "吴晓彤" },
+  ],
+
+  // --- Admin Workflow Runs ---
+  adminWorkflowRuns: [
+    { id: "WF-2025-0142", name: "每日短视频自动发布", trigger: "定时 08:00", startedAt: "2025-01-08 08:00:02", duration: "4m 32s", steps: 6, status: "success", triggered: "自动" },
+    { id: "WF-2025-0141", name: "GitHub PR 自动审查", trigger: "Webhook", startedAt: "2025-01-08 06:15:44", duration: "1m 08s", steps: 4, status: "success", triggered: "自动" },
+    { id: "WF-2025-0140", name: "客户消息自动回复", trigger: "事件", startedAt: "2025-01-08 05:42:18", duration: "0m 22s", steps: 3, status: "success", triggered: "自动" },
+    { id: "WF-2025-0139", name: "每日短视频自动发布", trigger: "定时 08:00", startedAt: "2025-01-07 08:00:01", duration: "5m 12s", steps: 6, status: "failed", triggered: "自动" },
+    { id: "WF-2025-0138", name: "AI漫剧批量生产", trigger: "手动", startedAt: "2025-01-07 14:22:30", duration: "12m 45s", steps: 8, status: "success", triggered: "陈逸飞" },
+    { id: "WF-2025-0137", name: "客户消息自动回复", trigger: "事件", startedAt: "2025-01-07 11:08:15", duration: "0m 18s", steps: 3, status: "success", triggered: "自动" },
+    { id: "WF-2025-0136", name: "GitHub PR 自动审查", trigger: "Webhook", startedAt: "2025-01-07 09:30:12", duration: "1m 15s", steps: 4, status: "partial", triggered: "自动" },
+    { id: "WF-2025-0135", name: "小说连载自动发布", trigger: "定时 20:00", startedAt: "2025-01-06 20:00:03", duration: "3m 28s", steps: 5, status: "success", triggered: "自动" },
+  ],
+
+  // --- System Logs ---
+  systemLogs: [
+    { time: "2025-01-08 10:23:14", level: "success", msg: "工作流 WF-2025-0142 执行完成，耗时 4m32s" },
+    { time: "2025-01-08 10:18:02", level: "info", msg: "抖音平台 Token 已自动刷新，新过期时间 2025-03-15" },
+    { time: "2025-01-08 10:15:33", level: "info", msg: "用户 周明轩 登录系统，IP: 114.88.xxx.xxx" },
+    { time: "2025-01-08 10:08:47", level: "warn", msg: "知乎平台 Token 将于 12 天后过期，请及时续期" },
+    { time: "2025-01-08 09:55:12", level: "success", msg: "内容已发布至 5 个平台：抖音/快手/视频号/B站/小红书" },
+    { time: "2025-01-08 09:42:08", level: "info", msg: "AI 工具「豆包」调用成功，消耗 1,280 tokens" },
+    { time: "2025-01-08 09:30:21", level: "error", msg: "钉钉平台同步失败：Token 已过期，请重新授权" },
+    { time: "2025-01-08 09:15:44", level: "info", msg: "素材资产「AI教育-封面图.png」上传成功" },
+    { time: "2025-01-08 08:00:02", level: "success", msg: "工作流「每日短视频自动发布」触发执行" },
+    { time: "2025-01-08 07:58:10", level: "warn", msg: "AI 用量已达本月 31.2%，预计 15 天后达到配额上限" },
+    { time: "2025-01-08 07:45:33", level: "info", msg: "系统自动备份完成，数据量 2.4GB" },
+    { time: "2025-01-08 07:30:08", level: "success", msg: "GitHub Webhook 接收成功：PR #42 已合并" },
+  ],
+
+  // --- System Settings ---
+  systemSettings: {
+    general: { siteName: "OPC 一人公司工作台", language: "zh-CN", timezone: "Asia/Shanghai", pageSize: 20 },
+    security: { twoFactor: true, sessionTimeout: 30, ipWhitelist: false, loginAlert: true, apiRateLimit: 100 },
+    storage: { totalQuota: "50GB", usedQuota: "12.4GB", autoClean: true, cleanAfter: 30, backupFreq: "每日" },
+    notification: { emailNotif: true, desktopNotif: true, soundNotif: false, digestFreq: "每日" },
+  },
 };
